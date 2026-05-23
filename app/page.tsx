@@ -107,7 +107,7 @@ export default async function HomePage() {
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight tracking-tight">
                 Compare colleges.<br />
-                <span className="text-brand-orange">Discover your path.</span>
+                <span className="text-brand-gold">Discover your path.</span>
               </h1>
 
               <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
@@ -217,8 +217,8 @@ export default async function HomePage() {
       {/* SECTION 2: STREAM DISCOVERY HUB */}
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="text-center max-w-xl mx-auto mb-12">
-          <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Explore by Stream</h2>
-          <p className="mt-2.5 text-xs sm:text-sm text-gray-500 leading-relaxed">
+          <h2 className="text-3xl font-extrabold text-brand-navy tracking-tight">Explore by Stream</h2>
+          <p className="mt-2.5 text-xs sm:text-sm text-slate-500 leading-relaxed">
             Navigate directly to customized listings filtered by academic interest, displaying local statistics and median placement salaries.
           </p>
         </div>
@@ -236,7 +236,7 @@ export default async function HomePage() {
                   <div className={`inline-flex p-3 rounded-xl bg-gradient-to-r ${stream.color} text-white mb-4 shadow-sm group-hover:scale-105 transition-transform duration-300`}>
                     <IconComponent className="h-5 w-5" />
                   </div>
-                  <h3 className="font-bold text-slate-800 text-sm leading-snug group-hover:text-brand-orange transition-colors">
+                  <h3 className="font-bold text-brand-navy text-sm leading-snug group-hover:text-brand-gold transition-colors">
                     {stream.label}
                   </h3>
                 </div>
@@ -260,8 +260,8 @@ export default async function HomePage() {
                 <Award className="h-4 w-4" />
                 <span>Featured Spotlights</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Top Rated Indian Campuses</h2>
-              <p className="mt-1.5 text-xs sm:text-sm text-gray-500">Premium institutes matching top ratings, established infrastructure, and student reviews.</p>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-navy tracking-tight">Top Rated Indian Campuses</h2>
+              <p className="mt-1.5 text-xs sm:text-sm text-slate-500">Premium institutes matching top ratings, established infrastructure, and student reviews.</p>
             </div>
             
             <Link
@@ -284,8 +284,8 @@ export default async function HomePage() {
       {/* SECTION 4: WHY UNIVERDICT BENTO GRID */}
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="text-center max-w-xl mx-auto mb-16">
-          <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Redefining College Selection</h2>
-          <p className="mt-2.5 text-xs sm:text-sm text-gray-500 leading-relaxed">
+          <h2 className="text-3xl font-extrabold text-brand-navy tracking-tight">Redefining College Selection</h2>
+          <p className="mt-2.5 text-xs sm:text-sm text-slate-500 leading-relaxed">
             We bypass sponsored ads and biased rankings. Here is how we verify raw academic facts and metrics.
           </p>
         </div>
@@ -443,8 +443,8 @@ export default async function HomePage() {
           <div className="inline-flex p-2 bg-brand-orange/10 text-brand-orange rounded-xl mb-3">
             <Quote className="h-5 w-5" />
           </div>
-          <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Genuine Success Stories</h2>
-          <p className="mt-2.5 text-xs sm:text-sm text-gray-500 leading-relaxed">
+          <h2 className="text-3xl font-extrabold text-brand-navy tracking-tight">Genuine Success Stories</h2>
+          <p className="mt-2.5 text-xs sm:text-sm text-slate-500 leading-relaxed">
             Read comments from students who used UniVerdict to find their backups and target colleges.
           </p>
         </div>

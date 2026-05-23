@@ -53,19 +53,19 @@ export function Footer() {
 
           {/* Column 3: Institutional / Legal */}
           <div className="space-y-3">
-            <h4 className="text-sm font-semibold text-white tracking-wider uppercase">Info & Legal</h4>
+            <h4 className="text-sm font-semibold text-white tracking-wider uppercase">Info &amp; Legal</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <span className="cursor-not-allowed opacity-60">About Us</span>
+                <Link href="/about" className="hover:text-white transition-colors">About Us</Link>
               </li>
               <li>
-                <span className="cursor-not-allowed opacity-60">Contact Support</span>
+                <Link href="/contact" className="hover:text-white transition-colors">Contact Support</Link>
               </li>
               <li>
-                <span className="cursor-not-allowed opacity-60">Privacy Policy</span>
+                <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
               </li>
               <li>
-                <span className="cursor-not-allowed opacity-60">Terms of Service</span>
+                <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
               </li>
             </ul>
           </div>
