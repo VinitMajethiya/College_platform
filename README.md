@@ -1,4 +1,4 @@
-# CollegeCompass
+# UniVerdict
 
 College discovery platform for Indian students, built with Next.js 14, TypeScript, Tailwind CSS, Prisma, NextAuth, Zustand, and TanStack Query.
 

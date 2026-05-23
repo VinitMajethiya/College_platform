@@ -42,7 +42,7 @@ export const useCompareStore = create<CompareStore>()(
       has: (id) => get().items.some((item) => item.id === id)
     }),
     {
-      name: "collegecompass-compare"
+      name: "univerdict-compare"
     }
   )
 );

@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     title: college.name,
     description: `${college.name} admissions, courses, fees, placements, reviews, and rankings.`,
     openGraph: {
-      title: `${college.name} | CollegeCompass`,
+      title: `${college.name} | UniVerdict`,
       description: `Compare ${college.name} fees, placements, reviews, and courses.`
     }
   };

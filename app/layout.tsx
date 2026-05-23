@@ -11,8 +11,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "CollegeCompass",
-    template: "%s | CollegeCompass"
+    default: "UniVerdict",
+    template: "%s | UniVerdict"
   },
   description: "Find your perfect college. Make your best decision."
 };

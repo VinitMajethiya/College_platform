@@ -1,11 +1,11 @@
-# CollegeCompass — College Discovery Platform
+# UniVerdict — College Discovery Platform
 ## Project Specification for AI Agent
 
 ---
 
 ## Overview
 
-Build a production-grade College Discovery Platform called **CollegeCompass**. This is a full-stack web application that helps Indian students discover, compare, and save colleges. The final product must feel cohesive, polished, and production-ready — not a demo.
+Build a production-grade College Discovery Platform called **UniVerdict**. This is a full-stack web application that helps Indian students discover, compare, and save colleges. The final product must feel cohesive, polished, and production-ready — not a demo.
 
 **Tagline:** "Find your perfect college. Make your best decision."
 

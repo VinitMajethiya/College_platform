@@ -17,11 +17,11 @@ const prisma = new PrismaClient({
 
 async function main() {
   const reviewer = await prisma.user.upsert({
-    where: { email: "seed-reviewer@collegecompass.local" },
+    where: { email: "seed-reviewer@univerdict.local" },
     update: {},
     create: {
-      email: "seed-reviewer@collegecompass.local",
-      name: "CollegeCompass Reviewer"
+      email: "seed-reviewer@univerdict.local",
+      name: "UniVerdict Reviewer"
     }
   });
 

@@ -68,7 +68,7 @@ export default async function HomePage() {
     {
       name: "Aarav Mehta",
       college: "NIT Trichy, CSE Alumni",
-      body: "CollegeCompass helped me compare options and realize NIT Trichy had better CSE placement percentages than several IIT branches. Saved me lakhs in fees!",
+      body: "UniVerdict helped me compare options and realize NIT Trichy had better CSE placement percentages than several IIT branches. Saved me lakhs in fees!",
       rating: 5,
       avatarBg: "bg-blue-600"
     },
@@ -159,7 +159,7 @@ export default async function HomePage() {
                 <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl">
                   <Image
                     src="/images/landing_hero.png"
-                    alt="CollegeCompass Discovery Dashboard Mockup"
+                    alt="UniVerdict Discovery Dashboard Mockup"
                     fill
                     priority
                     className="object-cover"
@@ -281,7 +281,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* SECTION 4: WHY COLLEGECOMPASS BENTO GRID */}
+      {/* SECTION 4: WHY UNIVERDICT BENTO GRID */}
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="text-center max-w-xl mx-auto mb-16">
           <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Redefining College Selection</h2>
@@ -445,7 +445,7 @@ export default async function HomePage() {
           </div>
           <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Genuine Success Stories</h2>
           <p className="mt-2.5 text-xs sm:text-sm text-gray-500 leading-relaxed">
-            Read comments from students who used CollegeCompass to find their backups and target colleges.
+            Read comments from students who used UniVerdict to find their backups and target colleges.
           </p>
         </div>
 

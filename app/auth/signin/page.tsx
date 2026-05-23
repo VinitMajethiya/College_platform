@@ -8,7 +8,7 @@ export default function SignInPage({ searchParams }: { searchParams: { callbackU
   return (
     <main className="mx-auto flex min-h-[calc(100vh-8rem)] max-w-md flex-col justify-center px-4 py-12">
       <div className="rounded-lg border bg-white p-6 shadow-sm dark:bg-slate-950">
-        <h1 className="text-2xl font-bold">Sign in to CollegeCompass</h1>
+        <h1 className="text-2xl font-bold">Sign in to UniVerdict</h1>
         <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">Save colleges and build collections across devices.</p>
         <form
           className="mt-6"
