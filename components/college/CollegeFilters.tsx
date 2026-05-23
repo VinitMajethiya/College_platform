@@ -96,9 +96,16 @@ export function CollegeFilters({
   const currentMaxRank = params.get("maxRank");
   const currentSort = params.get("sort") ?? "ranking";
 
-  const renderSectionLabel = (label: string, count?: number) => (
+  const renderSectionLabel = (
+    label: string,
+    count?: number,
+    htmlFor?: string
+  ) => (
     <div className="mb-2 flex items-center justify-between">
-      <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400">
+      <label
+        htmlFor={htmlFor}
+        className="block text-xs font-semibold uppercase tracking-wide text-slate-400"
+      >
         {label}
       </label>
       {!!count && (
@@ -112,10 +119,11 @@ export function CollegeFilters({
   const renderFilterContent = () => (
     <div className="space-y-6 text-slate-800">
       <div>
-        {renderSectionLabel("Search")}
+        {renderSectionLabel("Search", undefined, "filter-search-input")}
         <div className="relative">
           <SearchIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
           <input
+            id="filter-search-input"
             type="text"
             className="w-full rounded-[6px] border border-slate-200 bg-white py-2 pl-9 pr-4 text-sm placeholder:text-slate-400 focus:border-brand-gold focus:outline-none focus:ring-2 focus:ring-brand-gold/20"
             placeholder="Search city, stream, name..."
@@ -208,7 +216,7 @@ export function CollegeFilters({
       <hr className="border-slate-100" />
 
       <div>
-        {renderSectionLabel("Max annual fees")}
+        {renderSectionLabel("Max annual fees", undefined, "filter-fees-range")}
         <div className="mb-1 flex items-center justify-between text-xs font-semibold text-slate-900">
           <span>Rs 0</span>
           <span className="rounded bg-brand-goldLight px-2 py-0.5 text-brand-navy">
@@ -216,6 +224,7 @@ export function CollegeFilters({
           </span>
         </div>
         <input
+          id="filter-fees-range"
           type="range"
           min="50000"
           max="2500000"

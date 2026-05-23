@@ -15,22 +15,28 @@ export function CollegeCard({ college }: { college: College }) {
   const removeCompare = useCompareStore((state) => state.remove);
   const isCompared = useCompareStore((state) => state.has(college.id));
 
-  // Determine primary stream
+  // Determine primary stream based on priority
+  const STREAM_PRIORITY = [
+    "engineering",
+    "medical",
+    "management",
+    "law",
+    "arts",
+    "arts & humanities",
+    "science",
+    "commerce",
+    "architecture",
+    "pharmacy"
+  ];
   const courseTypes = college.courses.map((c) => c.type.toLowerCase());
-  let stream = "default";
-  if (courseTypes.includes("engineering")) stream = "engineering";
-  else if (courseTypes.includes("medical")) stream = "medical";
-  else if (courseTypes.includes("management")) stream = "management";
-  else if (courseTypes.includes("law")) stream = "law";
-  else if (
-    courseTypes.includes("arts") ||
-    courseTypes.includes("arts & humanities")
-  )
-    stream = "arts";
-  else if (courseTypes.includes("science")) stream = "science";
-  else if (courseTypes.includes("commerce")) stream = "commerce";
-  else if (courseTypes.includes("architecture")) stream = "architecture";
-  else if (courseTypes.includes("pharmacy")) stream = "pharmacy";
+  const matchedType = STREAM_PRIORITY.find((type) =>
+    courseTypes.includes(type)
+  );
+  const stream = matchedType
+    ? matchedType.startsWith("arts")
+      ? "arts"
+      : matchedType
+    : "default";
 
   const primaryCourseType = college.courses[0]?.type || "General";
 
