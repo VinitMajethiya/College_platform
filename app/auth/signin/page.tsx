@@ -19,16 +19,35 @@ export default function SignInPage({ searchParams }: { searchParams: { callbackU
         >
           <button className="w-full rounded-md bg-primary px-4 py-3 font-semibold text-white hover:bg-blue-700">Continue with Google</button>
         </form>
+        <div className="relative mt-6 mb-4">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-white px-2 text-slate-500 dark:bg-slate-950 dark:text-slate-400">
+              Or continue with
+            </span>
+          </div>
+        </div>
         <form
-          className="mt-3"
-          action={async () => {
+          className="flex flex-col gap-3"
+          action={async (formData) => {
             "use server";
-            await signIn("github", { redirectTo: callbackUrl });
+            const email = formData.get("email");
+            await signIn("nodemailer", { email, redirectTo: callbackUrl });
           }}
         >
-          <button className="inline-flex w-full items-center justify-center gap-2 rounded-md border px-4 py-3 font-semibold hover:border-primary hover:text-primary">
-            <Github className="h-4 w-4" />
-            Continue with GitHub
+          <label htmlFor="email" className="sr-only">Email address</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            placeholder="name@example.com"
+            className="w-full rounded-md border bg-transparent px-4 py-3 outline-none focus:border-primary"
+          />
+          <button className="w-full rounded-md border border-slate-200 bg-white px-4 py-3 font-semibold text-slate-900 transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-950 dark:text-white dark:hover:bg-slate-900">
+            Sign in with Email
           </button>
         </form>
       </div>
