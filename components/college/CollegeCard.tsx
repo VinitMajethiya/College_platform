@@ -1,6 +1,6 @@
 "use client";
 
-import { MapPin, Scale, Star, Check } from "lucide-react";
+import { Check, MapPin, Star } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -8,7 +8,6 @@ import { SaveButton } from "@/components/saved/SaveButton";
 import { College } from "@/lib/types";
 import { formatCurrencyINR } from "@/lib/utils";
 import { useCompareStore } from "@/store/compareStore";
-import { getStreamGradient } from "@/lib/design-tokens";
 import { cn } from "@/lib/utils";
 
 export function CollegeCard({ college }: { college: College }) {
@@ -29,7 +28,6 @@ export function CollegeCard({ college }: { college: College }) {
   else if (courseTypes.includes("architecture")) stream = "architecture";
   else if (courseTypes.includes("pharmacy")) stream = "pharmacy";
 
-  const gradient = getStreamGradient(stream);
   const primaryCourseType = college.courses[0]?.type || "General";
 
   const handleCompareClick = (e: React.MouseEvent) => {
@@ -49,25 +47,21 @@ export function CollegeCard({ college }: { college: College }) {
   };
 
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm hover:border-orange-300 hover:shadow-md transition-all duration-200">
-      
-      {/* College Banner */}
-      <Link href={`/colleges/${college.slug}`} className="block relative h-28 overflow-hidden select-none">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-[8px] border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-brand-gold hover:shadow-soft">
+      <Link href={`/colleges/${college.slug}`} className="block relative h-32 overflow-hidden select-none">
         <Image
           src={college.imageUrl || `/images/colleges/${["engineering", "medical", "management", "law"].includes(stream) ? stream : "default"}.png`}
           alt={college.name}
           fill
           sizes="(max-width: 768px) 100vw, 30vw"
-          className="object-cover group-hover:scale-105 transition-transform duration-500"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
           unoptimized
         />
-        {/* Rich gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/35 via-transparent to-slate-950/10" />
       </Link>
 
-      {/* Absolute Badges on Banner */}
       {college.nirfRanking && college.nirfRanking <= 200 && (
-        <span className="absolute top-3 left-3 bg-brand-orange text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full z-10 shadow-sm uppercase tracking-wider">
+        <span className="absolute top-3 left-3 z-10 rounded-full bg-white/92 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-brand-navy shadow-sm backdrop-blur">
           NIRF #{college.nirfRanking}
         </span>
       )}
@@ -75,36 +69,32 @@ export function CollegeCard({ college }: { college: College }) {
         <SaveButton collegeId={college.id} compact />
       </div>
 
-      {/* College Info Body */}
       <div className="flex flex-1 flex-col p-5">
         <Link href={`/colleges/${college.slug}`} className="block">
-          <h3 className="font-semibold text-gray-900 leading-snug group-hover:text-brand-orange transition-colors line-clamp-1">
+          <h3 className="line-clamp-2 min-h-[44px] font-semibold leading-snug text-slate-950 transition-colors group-hover:text-brand-navy">
             {college.name}
           </h3>
-          <p className="mt-1.5 flex items-center gap-1 text-xs text-gray-400">
-            <MapPin className="h-3.5 w-3.5 inline-block text-gray-400" />
+          <p className="mt-2 flex items-center gap-1 text-xs text-slate-500">
+            <MapPin className="h-3.5 w-3.5 flex-shrink-0 text-slate-400" />
             {college.city}, {college.state}
           </p>
         </Link>
 
-        {/* Info Chips */}
         <div className="mt-4 flex flex-wrap gap-1.5">
-          <span className="bg-blue-50 text-blue-700 text-[10px] font-medium px-2 py-0.5 rounded">
+          <span className="rounded bg-slate-100 px-2 py-1 text-[10px] font-medium text-brand-navy">
             {primaryCourseType}
           </span>
-          <span className="bg-green-50 text-green-700 text-[10px] font-medium px-2 py-0.5 rounded">
+          <span className="rounded bg-emerald-50 px-2 py-1 text-[10px] font-medium text-emerald-700">
             {formatCurrencyINR(college.annualFeesMin)}/yr
           </span>
           {college.avgPackageLPA && (
-            <span className="bg-orange-50 text-orange-700 text-[10px] font-medium px-2 py-0.5 rounded">
+            <span className="rounded bg-brand-goldLight px-2 py-1 text-[10px] font-medium text-brand-navy">
               Avg {formatCurrencyINR(college.avgPackageLPA * 100000)}
             </span>
           )}
         </div>
 
-        {/* Divider */}
-        <div className="mt-5 pt-4 border-t border-gray-100 flex items-center justify-between mt-auto">
-          {/* Rating */}
+        <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-4">
           <div className="flex items-center gap-1">
             <span className="flex items-center gap-0.5">
               {[...Array(5)].map((_, i) => {
@@ -120,18 +110,17 @@ export function CollegeCard({ college }: { college: College }) {
                 );
               })}
             </span>
-            <span className="text-xs font-semibold text-gray-700 ml-1">{college.rating.toFixed(1)}</span>
-            <span className="text-xs text-gray-400">({college.reviewCount})</span>
+            <span className="ml-1 text-xs font-semibold text-slate-700">{college.rating.toFixed(1)}</span>
+            <span className="text-xs text-slate-400">({college.reviewCount})</span>
           </div>
 
-          {/* Compare Button */}
           <button
             onClick={handleCompareClick}
             className={cn(
-              "text-xs font-medium transition-all duration-150 flex items-center gap-1 py-1 px-2.5 rounded-full",
+              "flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium transition-all duration-150",
               isCompared
-                ? "bg-slate-100 text-slate-600 border border-slate-200"
-                : "text-brand-orange hover:bg-brand-orangeLight"
+                ? "border border-slate-200 bg-slate-100 text-slate-600"
+                : "text-brand-navy hover:bg-brand-goldLight"
             )}
           >
             {isCompared ? (

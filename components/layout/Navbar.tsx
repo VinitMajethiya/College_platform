@@ -38,7 +38,7 @@ export function Navbar() {
             alt="UniVerdict Logo"
             width={36}
             height={36}
-            className="flex-shrink-0 drop-shadow-sm"
+            className="h-9 w-9 flex-shrink-0 drop-shadow-sm"
           />
           <span>
             Uni<span className="text-brand-gold">Verdict</span>
@@ -190,7 +190,7 @@ export function Navbar() {
               {/* Header */}
               <div className="flex items-center justify-between pb-6 border-b border-white/5">
                 <span className="flex items-center gap-2.5 font-semibold text-white">
-                  <Image src="/images/logo.png" alt="UniVerdict Logo" width={28} height={28} className="flex-shrink-0" />
+                  <Image src="/images/logo.png" alt="UniVerdict Logo" width={28} height={28} className="h-7 w-7 flex-shrink-0" />
                   <span>
                     Uni<span className="text-brand-gold">Verdict</span>
                   </span>

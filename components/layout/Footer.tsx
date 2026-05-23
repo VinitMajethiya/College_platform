@@ -12,7 +12,7 @@ export function Footer() {
           {/* Column 1: Brand details */}
           <div className="space-y-4">
             <span className="flex items-center gap-2.5 font-bold text-white text-base tracking-tight select-none">
-              <Image src="/images/logo.png" alt="UniVerdict Logo" width={32} height={32} className="flex-shrink-0" />
+              <Image src="/images/logo.png" alt="UniVerdict Logo" width={32} height={32} className="h-8 w-8 flex-shrink-0" />
               <span>Uni<span className="text-brand-gold">Verdict</span></span>
             </span>
             <p className="text-sm text-slate-400 leading-relaxed max-w-xs">

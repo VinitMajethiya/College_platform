@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { CourseType, College } from "@/lib/types";
 import { CollegeListQuery } from "@/lib/validations/college";
+import { colleges as sampleColleges, getCollegeBySlug as getSampleCollegeBySlug } from "@/lib/sample-data";
 
 export function mapCollege(college: any): College {
   return {
@@ -48,6 +49,14 @@ export function mapCollege(college: any): College {
 }
 
 export async function listColleges(query: CollegeListQuery) {
+  try {
+    return await listDbColleges(query);
+  } catch {
+    return listSampleColleges(query);
+  }
+}
+
+async function listDbColleges(query: CollegeListQuery) {
   const states = query.state ? query.state.split(",").filter(Boolean) : [];
   const courses = query.course ? query.course.split(",").filter(Boolean) : [];
   const search = query.search.trim();
@@ -166,10 +175,26 @@ export async function listColleges(query: CollegeListQuery) {
 }
 
 export async function getRelatedColleges(slug: string) {
-  const college = await prisma.college.findUnique({
-    where: { slug },
-    include: { courses: true }
-  });
+  let college;
+  try {
+    college = await prisma.college.findUnique({
+      where: { slug },
+      include: { courses: true }
+    });
+  } catch {
+    const sampleCollege = getSampleCollegeBySlug(slug);
+    if (!sampleCollege) return [];
+
+    const courseTypes = Array.from(new Set(sampleCollege.courses.map((course) => course.type)));
+    return sampleColleges
+      .filter(
+        (item) =>
+          item.slug !== slug &&
+          (item.state === sampleCollege.state || item.courses.some((course) => courseTypes.includes(course.type)))
+      )
+      .slice(0, 3);
+  }
+
   if (!college) return [];
 
   const courseTypes = Array.from(new Set(college.courses.map((course) => course.type)));
@@ -205,21 +230,91 @@ export async function getRelatedColleges(slug: string) {
 }
 
 export async function getCollegeBySlug(slug: string) {
-  const college = await prisma.college.findUnique({
-    where: { slug },
-    include: {
-      courses: true,
-      reviews: {
-        include: {
-          user: {
-            select: { name: true }
-          }
-        },
-        orderBy: { createdAt: "desc" }
+  try {
+    const college = await prisma.college.findUnique({
+      where: { slug },
+      include: {
+        courses: true,
+        reviews: {
+          include: {
+            user: {
+              select: { name: true }
+            }
+          },
+          orderBy: { createdAt: "desc" }
+        }
       }
+    });
+
+    if (!college) return null;
+    return mapCollege(college);
+  } catch {
+    return getSampleCollegeBySlug(slug) ?? null;
+  }
+}
+
+function listSampleColleges(query: CollegeListQuery) {
+  const states = query.state ? query.state.split(",").filter(Boolean) : [];
+  const courses = query.course ? query.course.split(",").filter(Boolean) : [];
+  const ids = query.ids ? query.ids.split(",").filter(Boolean) : [];
+  const search = query.search.trim().toLowerCase();
+
+  let filtered = sampleColleges.filter((college) => {
+    if (ids.length > 0 && !ids.includes(college.id)) return false;
+
+    if (search) {
+      const haystack = [
+        college.name,
+        college.city,
+        college.state,
+        ...college.courses.map((course) => `${course.name} ${course.type}`)
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      const acronymMatch =
+        (search === "iit" && college.name.toLowerCase().startsWith("indian institute of technology")) ||
+        (search === "nit" && college.name.toLowerCase().startsWith("national institute of technology")) ||
+        (search === "iim" && college.name.toLowerCase().startsWith("indian institute of management")) ||
+        (search === "aiims" && college.name.toLowerCase().includes("aiims"));
+
+      if (!haystack.includes(search) && !acronymMatch) return false;
     }
+
+    if (states.length > 0 && !states.includes(college.state)) return false;
+
+    if (courses.length > 0 && !college.courses.some((course) => courses.includes(course.type))) {
+      return false;
+    }
+
+    if (query.minFees !== undefined && college.annualFeesMax < query.minFees) return false;
+    if (query.maxFees !== undefined && college.annualFeesMin > query.maxFees) return false;
+    if (query.minRating !== undefined && college.rating < query.minRating) return false;
+    if (query.minRank !== undefined && (!college.nirfRanking || college.nirfRanking < query.minRank)) return false;
+    if (query.maxRank !== undefined && (!college.nirfRanking || college.nirfRanking > query.maxRank)) return false;
+
+    return true;
   });
 
-  if (!college) return null;
-  return mapCollege(college);
+  filtered = [...filtered].sort((first, second) => {
+    if (query.sort === "fees-asc") return first.annualFeesMin - second.annualFeesMin;
+    if (query.sort === "fees-desc") return second.annualFeesMax - first.annualFeesMax;
+    if (query.sort === "rating") return second.rating - first.rating;
+    if (query.sort === "name") return first.name.localeCompare(second.name);
+    return (first.nirfRanking ?? 9999) - (second.nirfRanking ?? 9999);
+  });
+
+  const total = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(total / query.pageSize));
+  const start = (query.page - 1) * query.pageSize;
+
+  return {
+    colleges: filtered.slice(start, start + query.pageSize),
+    pagination: {
+      page: query.page,
+      pageSize: query.pageSize,
+      total,
+      totalPages
+    }
+  };
 }

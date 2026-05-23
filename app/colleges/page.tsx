@@ -18,7 +18,7 @@ export default async function CollegesPage({
   const result = await listColleges(query);
 
   return (
-    <main className="bg-gray-50 min-h-screen">
+    <main className="min-h-screen bg-[#f7f9fc]">
       <CollegesClient colleges={result.colleges} pagination={result.pagination} />
     </main>
   );
