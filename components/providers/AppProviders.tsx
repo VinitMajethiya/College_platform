@@ -9,6 +9,7 @@ import { Toaster } from "sonner";
 import { CompareTray } from "@/components/college/CompareTray";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
+import { SearchModal } from "@/components/layout/SearchModal";
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
@@ -21,6 +22,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
           {children}
           <Footer />
           <CompareTray />
+          <SearchModal />
           <Toaster richColors position="top-right" />
         </QueryClientProvider>
       </ThemeProvider>

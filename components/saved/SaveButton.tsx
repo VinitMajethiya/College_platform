@@ -61,12 +61,14 @@ export function SaveButton({ collegeId, compact = false }: { collegeId: string; 
       disabled={isLoading}
       onClick={toggleSave}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-md border bg-white font-semibold transition hover:border-primary hover:text-primary disabled:opacity-60 dark:bg-slate-950",
-        compact ? "h-10 w-10" : "px-4 py-2"
+        "inline-flex items-center justify-center gap-1.5 transition-all disabled:opacity-60 duration-150 active:scale-90",
+        compact
+          ? "h-8 w-8 rounded-full bg-white/90 hover:bg-white text-gray-700 shadow-sm hover:scale-110"
+          : "px-4 py-2 rounded-xl text-sm font-semibold border border-brand-orange text-brand-orange hover:bg-brand-orangeLight"
       )}
     >
-      <Heart className={cn("h-4 w-4", isSaved && "fill-red-500 text-red-500")} />
-      {compact ? null : isSaved ? "Saved" : "Save"}
+      <Heart className={cn("h-4 w-4 transition-all duration-150", isSaved ? "fill-brand-orange text-brand-orange scale-110" : "text-gray-600")} />
+      {!compact && (isSaved ? "Saved" : "Save")}
     </button>
   );
 }

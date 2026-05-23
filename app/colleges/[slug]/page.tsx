@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { MapPin, Scale } from "lucide-react";
+import { MapPin, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { CollegeCard } from "@/components/college/CollegeCard";
 import { CollegeDetailTabs } from "@/components/college/CollegeDetailTabs";
-import { SaveButton } from "@/components/saved/SaveButton";
 import { getRelatedColleges, getCollegeBySlug } from "@/lib/college-service";
+import { getStreamGradient } from "@/lib/design-tokens";
 import { formatFeeRange } from "@/lib/utils";
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
@@ -29,51 +29,84 @@ export default async function CollegeDetailPage({ params }: { params: { slug: st
 
   const related = await getRelatedColleges(college.slug);
 
+  // Determine stream color
+  const courseTypes = college.courses.map((c) => c.type.toLowerCase());
+  let stream = "default";
+  if (courseTypes.includes("engineering")) stream = "engineering";
+  else if (courseTypes.includes("medical")) stream = "medical";
+  else if (courseTypes.includes("management")) stream = "management";
+  else if (courseTypes.includes("law")) stream = "law";
+  else if (courseTypes.includes("arts") || courseTypes.includes("arts & humanities")) stream = "arts";
+  else if (courseTypes.includes("science")) stream = "science";
+  else if (courseTypes.includes("commerce")) stream = "commerce";
+  else if (courseTypes.includes("architecture")) stream = "architecture";
+  else if (courseTypes.includes("pharmacy")) stream = "pharmacy";
+
+  const gradient = getStreamGradient(stream);
+
   return (
-    <main>
-      <section className="border-b bg-gradient-to-br from-blue-700 via-sky-600 to-emerald-500 text-white">
-        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-          <nav className="mb-8 text-sm text-blue-50">
-            <Link href="/" className="hover:underline">
-              Home
-            </Link>{" "}
-            /{" "}
-            <Link href="/colleges" className="hover:underline">
-              Colleges
-            </Link>{" "}
-            / {college.name}
-          </nav>
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <h1 className="max-w-4xl text-4xl font-bold tracking-tight">{college.name}</h1>
-              <p className="mt-3 flex items-center gap-2 text-blue-50">
-                <MapPin className="h-5 w-5" />
-                {college.city}, {college.state}
-              </p>
+    <main className="bg-gray-50 min-h-screen">
+      {/* 1. Breadcrumbs */}
+      <div className="bg-white border-b border-gray-100 py-3.5">
+        <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center gap-1.5 text-xs text-gray-400 font-medium">
+          <Link href="/" className="hover:text-brand-orange transition-colors">Home</Link>
+          <ChevronRight className="h-3 w-3" />
+          <Link href="/colleges" className="hover:text-brand-orange transition-colors">Colleges</Link>
+          <ChevronRight className="h-3 w-3" />
+          <span className="text-gray-700 font-normal truncate max-w-xs">{college.name}</span>
+        </nav>
+      </div>
+
+      {/* 2. Hero Section */}
+      <section className={`relative bg-gradient-to-r ${gradient} text-white py-12 overflow-hidden`}>
+        {/* Subtle grid pattern overlay */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+        
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="max-w-4xl space-y-4">
+            {/* Title */}
+            <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight leading-tight">
+              {college.name}
+            </h1>
+            
+            {/* Location */}
+            <p className="flex items-center gap-1.5 text-sm text-white/80">
+              <MapPin className="h-4.5 w-4.5 text-white/70 flex-shrink-0" />
+              <span>{college.city}, {college.state}</span>
+            </p>
+
+            {/* Quick Stat Badges */}
+            <div className="flex flex-wrap gap-2 pt-2">
+              {college.nirfRanking && (
+                <span className="bg-white/10 text-white text-xs font-semibold px-3 py-1 rounded-full border border-white/20">
+                  NIRF #{college.nirfRanking}
+                </span>
+              )}
+              <span className="bg-white/10 text-white text-xs font-semibold px-3 py-1 rounded-full border border-white/20">
+                ★ {college.rating.toFixed(1)}
+              </span>
+              <span className="bg-white/10 text-white text-xs font-semibold px-3 py-1 rounded-full border border-white/20">
+                Est. {college.established}
+              </span>
+              <span className="bg-white/10 text-white text-xs font-semibold px-3 py-1 rounded-full border border-white/20">
+                {formatFeeRange(college.annualFeesMin, college.annualFeesMax)}/yr
+              </span>
             </div>
-            <div className="flex gap-3">
-              <SaveButton collegeId={college.id} />
-              <Link href={`/compare?ids=${college.id}`} className="inline-flex items-center gap-2 rounded-md bg-white px-4 py-2 font-semibold text-slate-950">
-                <Scale className="h-4 w-4" />
-                Compare
-              </Link>
-            </div>
-          </div>
-          <div className="mt-8 grid gap-3 rounded-lg bg-white/10 p-4 backdrop-blur sm:grid-cols-4">
-            <Stat label="NIRF rank" value={college.nirfRanking ? `#${college.nirfRanking}` : "NA"} />
-            <Stat label="Rating" value={`${college.rating.toFixed(1)} / 5`} />
-            <Stat label="Fees" value={formatFeeRange(college.annualFeesMin, college.annualFeesMax)} />
-            <Stat label="Placement" value={`${college.placementPercent}%`} />
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      {/* 3. Detail Tabs Content */}
+      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <CollegeDetailTabs college={college} />
 
-        <section className="mt-12">
-          <h2 className="mb-5 text-xl font-bold">Related colleges</h2>
-          <div className="grid gap-5 md:grid-cols-3">
+        {/* Related Colleges */}
+        <section className="mt-16 border-t border-gray-200/60 pt-12">
+          <div className="mb-8">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">Related Colleges</h2>
+            <p className="mt-1.5 text-xs sm:text-sm text-gray-500">Similar institutions located near {college.state} or matching streams.</p>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {related.map((item) => (
               <CollegeCard key={item.id} college={item} />
             ))}
@@ -81,14 +114,5 @@ export default async function CollegeDetailPage({ params }: { params: { slug: st
         </section>
       </section>
     </main>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <p className="text-sm text-blue-50">{label}</p>
-      <p className="mt-1 font-bold">{value}</p>
-    </div>
   );
 }

@@ -1,9 +1,82 @@
+import Link from "next/link";
+import { Github, Twitter, Linkedin, Heart } from "lucide-react";
+
 export function Footer() {
   return (
-    <footer className="border-t py-8">
-      <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 text-sm text-slate-500 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
-        <p>CollegeCompass</p>
-        <p>Find your perfect college. Make your best decision.</p>
+    <footer className="bg-brand-navy text-slate-400 border-t border-white/5 py-12 mt-auto">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        
+        {/* Top: 3 Columns */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-white/5">
+          {/* Column 1: Brand details */}
+          <div className="space-y-4">
+            <span className="flex items-center gap-2 font-semibold text-white text-base tracking-tight">
+              <span className="h-2.5 w-2.5 rounded-full bg-brand-orange" />
+              <span>College<span className="text-brand-orange">Compass</span></span>
+            </span>
+            <p className="text-sm text-slate-400 leading-relaxed max-w-xs">
+              Honest student reviews, real placement analytics, and zero sponsored noise. Helping you navigate to your ideal future.
+            </p>
+            {/* Social Icons */}
+            <div className="flex items-center gap-3 pt-2">
+              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="p-1.5 hover:text-white hover:bg-white/5 rounded-full transition-all">
+                <Github className="h-4 w-4" />
+              </a>
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="p-1.5 hover:text-white hover:bg-white/5 rounded-full transition-all">
+                <Twitter className="h-4 w-4" />
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="p-1.5 hover:text-white hover:bg-white/5 rounded-full transition-all">
+                <Linkedin className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
+
+          {/* Column 2: Quick Links */}
+          <div className="space-y-3">
+            <h4 className="text-sm font-semibold text-white tracking-wider uppercase">Quick Links</h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link href="/colleges" className="hover:text-white transition-colors">Colleges Directory</Link>
+              </li>
+              <li>
+                <Link href="/compare" className="hover:text-white transition-colors">Compare Engine</Link>
+              </li>
+              <li>
+                <Link href="/saved" className="hover:text-white transition-colors">Saved Shortlists</Link>
+              </li>
+              <li>
+                <Link href="/auth/signin" className="hover:text-white transition-colors">Sign In / Account</Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 3: Institutional / Legal */}
+          <div className="space-y-3">
+            <h4 className="text-sm font-semibold text-white tracking-wider uppercase">Info & Legal</h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <span className="cursor-not-allowed opacity-60">About Us</span>
+              </li>
+              <li>
+                <span className="cursor-not-allowed opacity-60">Contact Support</span>
+              </li>
+              <li>
+                <span className="cursor-not-allowed opacity-60">Privacy Policy</span>
+              </li>
+              <li>
+                <span className="cursor-not-allowed opacity-60">Terms of Service</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+          <p>© 2026 CollegeCompass. All rights reserved.</p>
+          <p className="flex items-center gap-1">
+            Built for students, by students with <Heart className="h-3.5 w-3.5 text-brand-orange fill-brand-orange" />
+          </p>
+        </div>
       </div>
     </footer>
   );

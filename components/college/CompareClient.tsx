@@ -1,36 +1,37 @@
 "use client";
 
-import { Share2, X, Loader2, Search, Plus, Sparkles, Scale, GraduationCap, MapPin } from "lucide-react";
+import { Share2, X, Loader2, Search, Plus, Sparkles, Scale, GraduationCap, MapPin, Award, Check } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
 import { useColleges } from "@/hooks/useColleges";
-import { formatFeeRange } from "@/lib/utils";
+import { formatCurrencyINR } from "@/lib/utils";
 import { useCompareStore } from "@/store/compareStore";
+import { getStreamGradient } from "@/lib/design-tokens";
+import { cn } from "@/lib/utils";
 
 export function CompareClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   const storeItems = useCompareStore((state) => state.items);
   const add = useCompareStore((state) => state.add);
   const remove = useCompareStore((state) => state.remove);
 
-  // Derive active compared IDs from URL parameter first, falling back to local Zustand store
+  // Derive compared IDs from URL first, then Estado Zustand store
   const urlIds = searchParams.get("ids");
   const ids = (urlIds !== null ? urlIds : storeItems.map((item) => item.id).join(","))
     .split(",")
     .filter(Boolean);
 
-  // Synchronize URL IDs to Zustand store on mount if there's a difference
+  // Sync Zustand store with URL IDs
   useEffect(() => {
     if (urlIds) {
       const parsedIds = urlIds.split(",").filter(Boolean);
       parsedIds.forEach((id) => {
         if (!storeItems.some((item) => item.id === id)) {
-          // Attempt to add. In case we don't have details, store minimal
           add({ id, slug: id, name: id.split("-").join(" "), city: "", state: "" });
         }
       });
@@ -40,14 +41,14 @@ export function CompareClient() {
   const { data: collegesRes, isLoading } = useColleges({ ids: ids.join(",") });
   const selected = (collegesRes?.data || []).slice(0, 3);
 
-  // Inline search states
+  // Search input state
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(searchQuery);
-    }, 300);
+    }, 250);
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
@@ -64,7 +65,7 @@ export function CompareClient() {
       return;
     }
     if (ids.length >= 3) {
-      toast.error("You can compare up to 3 colleges");
+      toast.error("Remove a college first to add another.");
       return;
     }
 
@@ -98,269 +99,364 @@ export function CompareClient() {
   function share() {
     const url = `${window.location.origin}/compare?ids=${selected.map((college) => college.id).join(",")}`;
     void navigator.clipboard.writeText(url);
-    toast.success("Shareable compare URL copied to clipboard");
+    toast.success("Link copied!");
   }
 
   if (isLoading) {
     return (
-      <main className="mx-auto max-w-7xl px-4 py-16 flex flex-col items-center justify-center sm:px-6 lg:px-8">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <span className="ml-2 mt-4 font-semibold text-slate-500">Loading comparison details...</span>
+      <main className="mx-auto max-w-7xl px-4 py-24 flex flex-col items-center justify-center sm:px-6 lg:px-8">
+        <Loader2 className="h-8 w-8 animate-spin text-brand-orange" />
+        <span className="ml-2 mt-4 font-semibold text-slate-500 text-sm">Loading comparison details...</span>
       </main>
     );
   }
 
-  // EMPTY STATE WITH DIRECT SEARCH
+  // 1. EMPTY STATE
   if (selected.length === 0) {
     return (
-      <main className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-450">
-            <Scale className="h-7 w-7" />
-          </div>
-          <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Compare Colleges</h1>
-          <p className="mt-3 text-slate-500 max-w-lg mx-auto">
-            Search and add up to three Indian universities to compare courses, placement packages, NIRF rankings, and fees side-by-side.
-          </p>
+      <main className="mx-auto max-w-md px-4 py-20 text-center select-none">
+        <div className="p-5 bg-brand-orange/10 rounded-full text-brand-orange w-16 h-16 flex items-center justify-center mx-auto mb-6">
+          <svg className="w-10 h-10 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+          </svg>
         </div>
-
-        {/* Large Centered Search Widget */}
-        <div className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
-          <div className="relative">
-            <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Search by college name, city, or course type..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-12 pr-4 text-base outline-none focus:border-blue-500 focus:bg-white dark:border-slate-800 dark:bg-slate-900 dark:focus:border-blue-900 transition-all"
-            />
-          </div>
-
-          {/* Search results */}
-          {searchQuery.trim().length > 0 && (
-            <div className="mt-6 border-t border-slate-100 dark:border-slate-850 pt-4">
-              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Search Results</h3>
-              {isSearching ? (
-                <div className="flex justify-center py-6">
-                  <Loader2 className="h-6 w-6 animate-spin text-primary" />
-                </div>
-              ) : searchResults.length === 0 ? (
-                <p className="text-sm text-slate-500 py-4 text-center">No colleges found matching your search query.</p>
-              ) : (
-                <div className="space-y-2">
-                  {searchResults.map((college) => (
-                    <div
-                      key={college.id}
-                      className="flex items-center justify-between gap-4 p-3 rounded-xl border hover:bg-slate-50 dark:border-slate-850 dark:hover:bg-slate-900/60 transition-colors"
-                    >
-                      <div className="flex items-start gap-3">
-                        <GraduationCap className="h-5 w-5 text-blue-500 mt-1" />
-                        <div>
-                          <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">{college.name}</h4>
-                          <p className="mt-1 text-xs text-slate-400 flex items-center gap-1">
-                            <MapPin className="h-3.5 w-3.5" />
-                            {college.city}, {college.state}
-                          </p>
-                        </div>
-                      </div>
-                      <button
-                        onClick={() => handleAdd(college)}
-                        className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-blue-50 border border-blue-100 px-3 text-xs font-bold text-blue-600 hover:bg-blue-600 hover:text-white transition-all dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-900/30"
-                      >
-                        <Plus className="h-3.5 w-3.5" />
-                        Add
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
+        <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 tracking-tight">Your compare tray is empty</h1>
+        <p className="mt-2 text-sm text-gray-500 max-w-sm mx-auto leading-relaxed">
+          Browse colleges and tap + Compare to add them here.
+        </p>
+        <div className="mt-8 flex justify-center">
+          <Link
+            href="/colleges"
+            className="inline-flex items-center justify-center rounded-xl bg-brand-orange hover:bg-brand-orangeHover px-6 py-2.5 text-sm font-semibold text-white transition-all shadow-md shadow-brand-orange/15 active:scale-95"
+          >
+            Browse colleges →
+          </Link>
         </div>
       </main>
     );
   }
 
-  const lowestFee = Math.min(...selected.map((college) => college.annualFeesMin));
-  const highestRating = Math.max(...selected.map((college) => college.rating));
+  // Highlight calculations
+  const lowestMinFees = Math.min(...selected.map((c) => c.annualFeesMin));
+  const highestRating = Math.max(...selected.map((c) => c.rating));
+  const highestAvgPackage = Math.max(...selected.map((c) => c.avgPackageLPA || 0));
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      
+      {/* Page Header */}
+      <div className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Compare Colleges</h1>
-          <p className="mt-2 text-slate-550 dark:text-slate-350">
-            Comparing {selected.length} {selected.length === 1 ? "college" : "colleges"}. Differences are highlighted in amber.
+          <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">Compare Colleges</h1>
+          <p className="mt-1.5 text-xs sm:text-sm text-gray-500">
+            Comparing {selected.length} {selected.length === 1 ? "college" : "colleges"}. Use search slots to add more.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
-          {selected.length < 3 && (
-            <div className="relative">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Quick add college..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="h-10 rounded-lg border border-slate-200 bg-white px-3 pl-8 text-xs outline-none focus:border-blue-500 dark:border-slate-800 dark:bg-slate-950 focus:bg-white"
-                />
-                <Search className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-              </div>
-
-              {/* Quick Results Popover */}
-              {searchQuery.trim().length > 0 && (
-                <div className="absolute right-0 mt-2 w-80 rounded-xl border bg-white p-3 shadow-xl dark:bg-slate-950 z-50">
-                  {isSearching ? (
-                    <div className="flex justify-center py-4">
-                      <Loader2 className="h-5 w-5 animate-spin text-primary" />
-                    </div>
-                  ) : searchResults.length === 0 ? (
-                    <p className="text-xs text-slate-500 py-2 text-center">No colleges found.</p>
-                  ) : (
-                    <div className="space-y-1.5">
-                      {searchResults.map((col) => {
-                        const isAlreadyAdded = ids.includes(col.id);
-                        return (
-                          <div
-                            key={col.id}
-                            className="flex items-center justify-between gap-3 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-900/60 transition-colors"
-                          >
-                            <div className="truncate pr-2">
-                              <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate">{col.name}</h4>
-                              <p className="text-[10px] text-slate-400 truncate">{col.city}, {col.state}</p>
-                            </div>
-                            <button
-                              disabled={isAlreadyAdded}
-                              onClick={() => handleAdd(col)}
-                              className="shrink-0 inline-flex h-7 items-center gap-1 rounded bg-blue-50 px-2 text-[10px] font-bold text-blue-600 hover:bg-blue-600 hover:text-white disabled:bg-slate-100 disabled:text-slate-400 dark:bg-blue-950/40 dark:text-blue-400"
-                            >
-                              <Plus className="h-3 w-3" />
-                              {isAlreadyAdded ? "Added" : "Add"}
-                            </button>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
-
-          <button
-            onClick={share}
-            className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border bg-white px-4 py-2 text-sm font-semibold hover:border-primary hover:text-primary dark:bg-slate-950 transition-colors"
-          >
-            <Share2 className="h-4 w-4" />
-            Share URL
-          </button>
-        </div>
+        
+        <button
+          onClick={share}
+          className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-brand-orange text-brand-orange hover:bg-brand-orangeLight px-5 py-2.5 text-xs sm:text-sm font-semibold transition-all active:scale-95"
+        >
+          <Share2 className="h-4 w-4" />
+          <span>🔗 Share this comparison</span>
+        </button>
       </div>
 
-      <div className="overflow-x-auto rounded-2xl border bg-white dark:bg-slate-950 shadow-sm">
-        <table className="w-full min-w-[860px] table-fixed text-left text-sm">
+      {/* Comparison Table */}
+      <div className="overflow-x-auto rounded-2xl border border-gray-100 bg-white shadow-sm">
+        <table className="w-full min-w-[850px] table-fixed border-collapse text-left text-xs sm:text-sm">
           <thead>
-            <tr className="border-b border-slate-100 dark:border-slate-850">
-              <th className="w-56 p-5 font-semibold text-slate-400 uppercase tracking-wider text-xs">Comparison Criteria</th>
-              {selected.map((college) => (
-                <th key={college.id} className="p-5 align-top">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="pr-2">
-                      <Link href={`/colleges/${college.slug}`} className="text-base font-extrabold text-slate-900 hover:text-blue-600 dark:text-white dark:hover:text-blue-400 leading-snug">
-                        {college.name}
-                      </Link>
-                      <p className="mt-1.5 text-xs font-semibold text-slate-400 flex items-center gap-1">
-                        <MapPin className="h-3.5 w-3.5" />
-                        {college.city}, {college.state}
-                      </p>
-                    </div>
-                    <button
-                      aria-label={`Remove ${college.name} from comparison`}
-                      onClick={() => handleRemove(college.id)}
-                      className="shrink-0 flex h-7 w-7 items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900 border text-slate-400 hover:text-red-500 transition-colors"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
-                  </div>
-                  <div className="mt-4 flex flex-wrap gap-1.5">
-                    {college.annualFeesMin === lowestFee ? <Badge color="emerald">Best Value</Badge> : null}
-                    {college.rating === highestRating ? <Badge color="amber">Top Rated</Badge> : null}
-                  </div>
-                </th>
-              ))}
+            <tr className="border-b border-gray-100">
+              <th className="w-48 p-4 font-semibold text-gray-400 uppercase tracking-wider text-[10px] select-none">
+                Comparison Details
+              </th>
+              
+              {selected.map((college) => {
+                const courseTypes = college.courses.map((c) => c.type.toLowerCase());
+                let stream = "default";
+                if (courseTypes.includes("engineering")) stream = "engineering";
+                else if (courseTypes.includes("medical")) stream = "medical";
+                else if (courseTypes.includes("management")) stream = "management";
+                else if (courseTypes.includes("law")) stream = "law";
+                else if (courseTypes.includes("arts") || courseTypes.includes("arts & humanities")) stream = "arts";
 
-              {/* DASHED COLUMN INCASE SLOTS REMAIN */}
+                return (
+                  <th key={college.id} className="p-4 align-top w-64 border-l border-gray-100">
+                    <div className="space-y-3">
+                      {/* Mini Banner */}
+                      <div className={cn("relative h-[60px] flex items-center px-4 overflow-hidden rounded-xl bg-gradient-to-r select-none", getStreamGradient(stream))}>
+                        <span className="text-sm font-semibold text-white truncate pr-6">{college.name}</span>
+                        <button
+                          onClick={() => handleRemove(college.id)}
+                          className="absolute top-2 right-2 p-1 text-white/70 hover:text-white rounded-full hover:bg-white/10 transition-colors"
+                          aria-label={`Remove ${college.name}`}
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <Link
+                          href={`/colleges/${college.slug}`}
+                          className="text-xs font-semibold text-brand-orange hover:text-brand-orangeHover hover:underline"
+                        >
+                          View detail →
+                        </Link>
+                        <span className="text-[10px] text-gray-400">{college.city}, {college.state}</span>
+                      </div>
+                    </div>
+                  </th>
+                );
+              })}
+
+              {/* DASHED COLUMN SLOT IF < 3 */}
               {selected.length < 3 && (
-                <th className="p-5 align-middle w-72 bg-slate-50/30 border-l border-dashed border-slate-200 dark:bg-slate-900/10 dark:border-slate-850">
-                  <div className="flex flex-col items-center justify-center py-6 text-center">
-                    <Sparkles className="h-5 w-5 text-blue-400 animate-pulse" />
-                    <span className="mt-2 text-xs font-bold text-slate-400">Slot Available ({3 - selected.length} left)</span>
-                    <span className="mt-1 text-[11px] text-slate-350">Use the quick add search above!</span>
+                <th className="p-4 align-middle w-64 bg-gray-50/20 border-l border-dashed border-gray-200">
+                  <div className="flex flex-col items-center justify-center py-4 text-center">
+                    <Sparkles className="h-5 w-5 text-orange-400 animate-pulse mb-2" />
+                    <span className="text-xs font-bold text-gray-400">Slot Available ({3 - selected.length} left)</span>
+                    <span className="text-[10px] text-gray-300 mt-0.5">Use search below to add</span>
                   </div>
                 </th>
               )}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 dark:divide-slate-850">
-            <Row label="Location" values={selected.map((college) => `${college.city}, ${college.state}`)} emptyCount={3 - selected.length} />
-            <Row label="Established" values={selected.map((college) => String(college.established))} emptyCount={3 - selected.length} />
-            <Row label="NIRF Ranking" values={selected.map((college) => (college.nirfRanking ? `#${college.nirfRanking}` : "NA"))} emptyCount={3 - selected.length} />
-            <Row label="Overall Rating" values={selected.map((college) => `${college.rating.toFixed(1)} / 5`)} emptyCount={3 - selected.length} />
-            <Row label="Annual Fees" values={selected.map((college) => formatFeeRange(college.annualFeesMin, college.annualFeesMax))} emptyCount={3 - selected.length} />
-            <Row label="Average Placement" values={selected.map((college) => `${college.avgPackageLPA || 0} LPA`)} emptyCount={3 - selected.length} />
-            <Row label="Highest Placement" values={selected.map((college) => `${college.highestPackageLPA || 0} LPA`)} emptyCount={3 - selected.length} />
-            <Row label="Placement Success" values={selected.map((college) => `${college.placementPercent || 0}%`)} emptyCount={3 - selected.length} />
-            <Row label="Accreditations" values={selected.map((college) => college.accreditations.join(", "))} emptyCount={3 - selected.length} />
-            <Row label="Campus Area" values={selected.map((college) => `${college.campusAreaAcres || 0} Acres`)} emptyCount={3 - selected.length} />
+          
+          <tbody className="divide-y divide-gray-100">
+            {/* 1. Overview */}
+            <tr className="bg-gray-50/40 select-none">
+              <td colSpan={4} className="p-3 font-semibold text-gray-900 text-xs tracking-wider uppercase">
+                Overview
+              </td>
+            </tr>
+            <CompareRow
+              label="NIRF Ranking"
+              values={selected.map((c) => (c.nirfRanking ? `#${c.nirfRanking}` : "N/A"))}
+              emptyCount={3 - selected.length}
+            />
+            <CompareRow
+              label="Overall Rating"
+              values={selected.map((c) => `${c.rating.toFixed(1)} ★`)}
+              emptyCount={3 - selected.length}
+              highlightType="rating"
+              collegeRatings={selected.map((c) => c.rating)}
+              bestVal={highestRating}
+            />
+            <CompareRow
+              label="Established"
+              values={selected.map((c) => String(c.established))}
+              emptyCount={3 - selected.length}
+            />
+            <CompareRow
+              label="Accreditations"
+              values={selected.map((c) => c.accreditations.join(", ") || "N/A")}
+              emptyCount={3 - selected.length}
+            />
+
+            {/* 2. Fees */}
+            <tr className="bg-gray-50/40 select-none">
+              <td colSpan={4} className="p-3 font-semibold text-gray-900 text-xs tracking-wider uppercase">
+                Fees
+              </td>
+            </tr>
+            <CompareRow
+              label="Min Annual Fee"
+              values={selected.map((c) => formatCurrencyINR(c.annualFeesMin))}
+              emptyCount={3 - selected.length}
+              highlightType="fees"
+              collegeFees={selected.map((c) => c.annualFeesMin)}
+              bestVal={lowestMinFees}
+            />
+            <CompareRow
+              label="Max Annual Fee"
+              values={selected.map((c) => formatCurrencyINR(c.annualFeesMax))}
+              emptyCount={3 - selected.length}
+            />
+
+            {/* 3. Placements */}
+            <tr className="bg-gray-50/40 select-none">
+              <td colSpan={4} className="p-3 font-semibold text-gray-900 text-xs tracking-wider uppercase">
+                Placements
+              </td>
+            </tr>
+            <CompareRow
+              label="Average Package"
+              values={selected.map((c) => (c.avgPackageLPA ? `₹${c.avgPackageLPA} LPA` : "N/A"))}
+              emptyCount={3 - selected.length}
+              highlightType="placement"
+              collegePackages={selected.map((c) => c.avgPackageLPA || 0)}
+              bestVal={highestAvgPackage}
+            />
+            <CompareRow
+              label="Highest Package"
+              values={selected.map((c) => (c.highestPackageLPA ? `₹${c.highestPackageLPA} LPA` : "N/A"))}
+              emptyCount={3 - selected.length}
+            />
+            <CompareRow
+              label="Placement Rate"
+              values={selected.map((c) => (c.placementPercent ? `${c.placementPercent}%` : "N/A"))}
+              emptyCount={3 - selected.length}
+            />
+
+            {/* 4. Courses */}
+            <tr className="bg-gray-50/40 select-none">
+              <td colSpan={4} className="p-3 font-semibold text-gray-900 text-xs tracking-wider uppercase">
+                Courses
+              </td>
+            </tr>
+            <tr className="hover:bg-gray-50/30">
+              <td className="p-4 font-semibold text-gray-500">Available Streams</td>
+              {selected.map((college) => {
+                const uniqueStreams = Array.from(new Set(college.courses.map((c) => c.type)));
+                return (
+                  <td key={college.id} className="p-4 border-l border-gray-100">
+                    <div className="flex flex-wrap gap-1">
+                      {uniqueStreams.map((st) => (
+                        <span key={st} className="bg-slate-100 text-slate-600 text-[9px] font-semibold px-2 py-0.5 rounded">
+                          {st}
+                        </span>
+                      ))}
+                    </div>
+                  </td>
+                );
+              })}
+              {selected.length < 3 && (
+                <td className="p-4 border-l border-dashed border-gray-200 bg-gray-50/10" />
+              )}
+            </tr>
           </tbody>
         </table>
       </div>
+
+      {/* Highlights Legend */}
+      <div className="mt-4 p-4 bg-gray-50 border border-gray-150 rounded-xl text-xs text-gray-500 flex flex-wrap gap-6 items-center select-none">
+        <span className="font-semibold text-gray-700">Colors Legend:</span>
+        <div className="flex items-center gap-1.5">
+          <span className="h-3.5 w-3.5 rounded bg-green-50 border border-green-200" />
+          <span>Best Value (Lowest Fee)</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="h-3.5 w-3.5 rounded bg-orange-50 border border-orange-200" />
+          <span>Top Rated (Highest Stars)</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="h-3.5 w-3.5 rounded bg-blue-50 border border-blue-200" />
+          <span>Best Placement (Highest Avg Package)</span>
+        </div>
+      </div>
+
+      {/* Quick Search Widget inside comparison panel (if slots remain) */}
+      {selected.length < 3 && (
+        <div className="mt-8 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+          <h3 className="text-sm font-semibold text-gray-900 mb-3 select-none">
+            Add a college to compare
+          </h3>
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search by college name, stream, or city..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="h-11 w-full rounded-xl border border-gray-200 bg-slate-50/50 pl-11 pr-4 text-xs sm:text-sm outline-none focus:border-brand-orange focus:bg-white transition-all"
+            />
+          </div>
+
+          {searchQuery.trim().length > 0 && (
+            <div className="mt-4 border-t border-gray-100 pt-4 space-y-2">
+              <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 select-none">Search Results</h4>
+              {isSearching ? (
+                <div className="flex justify-center py-4">
+                  <Loader2 className="h-5 w-5 animate-spin text-brand-orange" />
+                </div>
+              ) : searchResults.length === 0 ? (
+                <p className="text-xs text-gray-400 py-2">No colleges found matching &quot;{searchQuery}&quot;</p>
+              ) : (
+                <div className="space-y-1.5">
+                  {searchResults.map((col) => {
+                    const isAlreadyAdded = ids.includes(col.id);
+                    return (
+                      <div
+                        key={col.id}
+                        className="flex items-center justify-between gap-3 p-2 rounded-xl border border-transparent hover:bg-gray-50 hover:border-gray-100 transition-colors"
+                      >
+                        <div className="truncate">
+                          <h5 className="text-xs font-bold text-gray-900 truncate">{col.name}</h5>
+                          <p className="text-[10px] text-gray-400">{col.city}, {col.state}</p>
+                        </div>
+                        <button
+                          disabled={isAlreadyAdded}
+                          onClick={() => handleAdd(col)}
+                          className={cn(
+                            "inline-flex h-7 items-center gap-1 rounded px-2.5 text-[10px] font-semibold transition-all duration-100 active:scale-95 border",
+                            isAlreadyAdded
+                              ? "bg-slate-100 border-slate-200 text-slate-400"
+                              : "bg-brand-orangeLight border-brand-orange/30 text-brand-orange hover:bg-brand-orange hover:text-white"
+                          )}
+                        >
+                          <Plus className="h-3 w-3" />
+                          <span>{isAlreadyAdded ? "Added" : "Add"}</span>
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </main>
   );
 }
 
-function Badge({ children, color }: { children: React.ReactNode; color: "emerald" | "amber" }) {
-  const styles = {
-    emerald: "bg-emerald-50 text-emerald-700 border-emerald-100 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-900/30",
-    amber: "bg-amber-50 text-amber-700 border-amber-100 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-900/30"
-  };
-
-  return (
-    <span className={`inline-flex rounded-full border px-2.5 py-0.5 text-xs font-bold ${styles[color]}`}>
-      {children}
-    </span>
-  );
-}
-
-interface RowProps {
+interface CompareRowProps {
   label: string;
   values: string[];
   emptyCount: number;
+  highlightType?: "fees" | "rating" | "placement";
+  collegeFees?: number[];
+  collegeRatings?: number[];
+  collegePackages?: number[];
+  bestVal?: number;
 }
 
-function Row({ label, values, emptyCount }: RowProps) {
-  // If the criteria values differ across selected colleges, highlight the row differences
-  const differs = values.length > 1 && new Set(values).size > 1;
-
+function CompareRow({
+  label,
+  values,
+  emptyCount,
+  highlightType,
+  collegeFees,
+  collegeRatings,
+  collegePackages,
+  bestVal
+}: CompareRowProps) {
   return (
-    <tr className="hover:bg-slate-50/20 dark:hover:bg-slate-900/10 transition-colors">
-      <th className="p-5 font-bold text-slate-655 dark:text-slate-350">{label}</th>
-      {values.map((value, index) => (
-        <td
-          key={`${label}-${index}`}
-          className={
-            differs
-              ? "bg-amber-50/40 p-5 font-medium text-slate-800 dark:bg-amber-950/15 dark:text-slate-200"
-              : "p-5 text-slate-700 dark:text-slate-350"
-          }
-        >
-          {value}
-        </td>
-      ))}
-      {/* Blank space to match placeholder column */}
+    <tr className="hover:bg-gray-50/20 transition-colors">
+      <td className="p-4 font-semibold text-gray-500 select-none">{label}</td>
+      {values.map((value, idx) => {
+        let isBest = false;
+        let cellClass = "p-4 border-l border-gray-100 text-gray-700";
+
+        if (highlightType === "fees" && collegeFees && bestVal !== undefined) {
+          isBest = collegeFees[idx] === bestVal;
+          if (isBest) cellClass = "p-4 border-l border-gray-100 bg-green-50 text-green-800 font-semibold border-y border-green-200";
+        } else if (highlightType === "rating" && collegeRatings && bestVal !== undefined) {
+          isBest = collegeRatings[idx] === bestVal;
+          if (isBest) cellClass = "p-4 border-l border-gray-100 bg-orange-50 text-orange-850 font-semibold border-y border-orange-200";
+        } else if (highlightType === "placement" && collegePackages && bestVal !== undefined && bestVal > 0) {
+          isBest = collegePackages[idx] === bestVal;
+          if (isBest) cellClass = "p-4 border-l border-gray-100 bg-blue-50 text-blue-800 font-semibold border-y border-blue-200";
+        }
+
+        return (
+          <td key={idx} className={cellClass}>
+            {value}
+          </td>
+        );
+      })}
       {emptyCount > 0 && (
-        <td className="p-5 bg-slate-50/10 border-l border-dashed border-slate-100 dark:bg-slate-900/5 dark:border-slate-850" />
+        <td className="p-4 border-l border-dashed border-gray-250 bg-gray-50/10" />
       )}
     </tr>
   );
