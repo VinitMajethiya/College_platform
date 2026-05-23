@@ -1,0 +1,51 @@
+  ▲ Next.js 14.2.18
+  - Local:        http://localhost:3001
+  - Network:      http://0.0.0.0:3001
+
+ ✓ Starting...
+ ✓ Ready in 2.2s
+ ○ Compiling / ...
+ ✓ Compiled / in 3.5s (668 modules)
+ GET / 200 in 3749ms
+ ○ Compiling /colleges ...
+ ✓ Compiled /colleges in 667ms (697 modules)
+ GET /colleges?search=IIT 200 in 823ms
+ ✓ Compiled in 2s (340 modules)
+ ✓ Compiled in 228ms (340 modules)
+ ✓ Compiled in 223ms (340 modules)
+ ✓ Compiled in 30ms
+ ✓ Compiled in 195ms (340 modules)
+ ✓ Compiled in 320ms (340 modules)
+ ✓ Compiled in 398ms (340 modules)
+ ✓ Compiled in 323ms (340 modules)
+ ✓ Compiled in 284ms (340 modules)
+ ✓ Compiled in 187ms (340 modules)
+ ✓ Compiled in 767ms (345 modules)
+ ✓ Compiled in 348ms (345 modules)
+ ✓ Compiled in 354ms (346 modules)
+ ✓ Compiled in 142ms (346 modules)
+ ✓ Compiled in 254ms (346 modules)
+ ✓ Compiled in 196ms (346 modules)
+ ✓ Compiled in 161ms (346 modules)
+ ✓ Compiled in 183ms (346 modules)
+ ✓ Compiled in 272ms (346 modules)
+ ✓ Compiled in 273ms (346 modules)
+ ✓ Compiled in 229ms (346 modules)
+   Reload env: .env.local
+ ✓ Compiled in 127ms (332 modules)
+   Reload env: .env.local
+ ✓ Compiled in 62ms (332 modules)
+   Reload env: .env
+ ✓ Compiled in 704ms (346 modules)
+ ✓ Compiled in 513ms (346 modules)
+   Reload env: .env
+ ✓ Compiled in 312ms (346 modules)
+ ✓ Compiled in 141ms (346 modules)
+   Reload env: .env
+ ✓ Compiled in 240ms (332 modules)
+   Reload env: .env
+ ✓ Compiled in 89ms (332 modules)
+   Reload env: .env
+ ✓ Compiled in 102ms (332 modules)
+   Reload env: .env
+ ✓ Compiled in 66ms (332 modules)
