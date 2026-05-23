@@ -10,9 +10,9 @@ export type StreamType =
   | "pharmacy";
 
 export const STREAM_GRADIENTS: Record<string, string> = {
-  engineering: "from-[#1a1a2e] to-[#0f3460]",
+  engineering: "from-[#1B3566] to-[#0F2247]",
   medical: "from-[#064e3b] to-[#065f46]",
-  management: "from-[#1e1b4b] to-[#312e81]",
+  management: "from-[#152D5A] to-[#1B3566]",
   law: "from-[#1c1917] to-[#292524]",
   arts: "from-[#4a1d96] to-[#6d28d9]",
   "arts & humanities": "from-[#4a1d96] to-[#6d28d9]",
@@ -24,5 +24,5 @@ export const STREAM_GRADIENTS: Record<string, string> = {
 
 export function getStreamGradient(stream: string): string {
   const normalized = stream.toLowerCase().trim();
-  return STREAM_GRADIENTS[normalized] || "from-[#1a1a2e] to-[#16213e]";
+  return STREAM_GRADIENTS[normalized] || "from-[#1B3566] to-[#152D5A]";
 }

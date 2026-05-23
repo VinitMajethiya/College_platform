@@ -32,25 +32,16 @@ export function Navbar() {
       <nav className="mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         
         {/* Left: Logo */}
-        <Link href="/" className="flex items-center gap-2 font-bold text-white text-lg tracking-tight select-none hover:opacity-90 transition-opacity">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="h-6 w-6 text-brand-orange flex-shrink-0"
-          >
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-            <path d="M9 10h6" />
-            <path d="M12 7v9" />
-            <path d="M10 16h4" />
-            <path d="M9 10l-1.5 3h3z" />
-            <path d="M15 10l-1.5 3h3z" />
-          </svg>
+        <Link href="/" className="flex items-center gap-2.5 font-bold text-white text-lg tracking-tight select-none hover:opacity-90 transition-opacity">
+          <Image
+            src="/images/logo.png"
+            alt="UniVerdict Logo"
+            width={36}
+            height={36}
+            className="flex-shrink-0 drop-shadow-sm"
+          />
           <span>
-            Uni<span className="text-brand-orange">Verdict</span>
+            Uni<span className="text-brand-gold">Verdict</span>
           </span>
         </Link>
 
@@ -198,10 +189,10 @@ export function Navbar() {
             <div>
               {/* Header */}
               <div className="flex items-center justify-between pb-6 border-b border-white/5">
-                <span className="flex items-center gap-2 font-semibold text-white">
-                  <span className="h-2.5 w-2.5 rounded-full bg-brand-orange" />
+                <span className="flex items-center gap-2.5 font-semibold text-white">
+                  <Image src="/images/logo.png" alt="UniVerdict Logo" width={28} height={28} className="flex-shrink-0" />
                   <span>
-                    College<span className="text-brand-orange">Compass</span>
+                    Uni<span className="text-brand-gold">Verdict</span>
                   </span>
                 </span>
                 <button

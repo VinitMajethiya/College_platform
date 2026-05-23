@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Github, Twitter, Linkedin, Heart } from "lucide-react";
 
 export function Footer() {
@@ -10,24 +11,9 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-white/5">
           {/* Column 1: Brand details */}
           <div className="space-y-4">
-            <span className="flex items-center gap-2 font-bold text-white text-base tracking-tight select-none">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-5 w-5 text-brand-orange flex-shrink-0"
-              >
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                <path d="M9 10h6" />
-                <path d="M12 7v9" />
-                <path d="M10 16h4" />
-                <path d="M9 10l-1.5 3h3z" />
-                <path d="M15 10l-1.5 3h3z" />
-              </svg>
-              <span>Uni<span className="text-brand-orange">Verdict</span></span>
+            <span className="flex items-center gap-2.5 font-bold text-white text-base tracking-tight select-none">
+              <Image src="/images/logo.png" alt="UniVerdict Logo" width={32} height={32} className="flex-shrink-0" />
+              <span>Uni<span className="text-brand-gold">Verdict</span></span>
             </span>
             <p className="text-sm text-slate-400 leading-relaxed max-w-xs">
               Honest student reviews, real placement analytics, and zero sponsored noise. Helping you navigate to your ideal future.
@@ -89,7 +75,7 @@ export function Footer() {
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
           <p>© 2026 UniVerdict. All rights reserved.</p>
           <p className="flex items-center gap-1">
-            Built for students, by students with <Heart className="h-3.5 w-3.5 text-brand-orange fill-brand-orange" />
+            Built for students, by students with <Heart className="h-3.5 w-3.5 text-brand-gold fill-brand-gold" />
           </p>
         </div>
       </div>

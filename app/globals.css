@@ -4,14 +4,14 @@
 
 :root {
   --background: 0 0% 100%;
-  --foreground: 222 47% 11%;
-  --border: 214 32% 91%;
+  --foreground: 222 62% 24%;
+  --border: 221 39% 88%;
 }
 
 .dark {
-  --background: 222 47% 7%;
+  --background: 222 54% 9%;
   --foreground: 210 40% 98%;
-  --border: 217 33% 20%;
+  --border: 221 38% 22%;
 }
 
 * {
@@ -30,5 +30,5 @@ body {
 
 :focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px #F97316;
+  box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px #C9A227;
 }
