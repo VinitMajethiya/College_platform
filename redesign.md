@@ -1,4 +1,5 @@
 # Frontend Redesign — CollegeCompass
+
 ## Complete Agent Prompt
 
 ---
@@ -14,6 +15,7 @@ Redesign and rebuild the entire frontend of CollegeCompass from scratch. Do not 
 **Study this reference before writing a single line of code:** https://www.collegedekho.com
 
 CollegeDekho is your primary visual and UX inspiration. Understand what makes it work:
+
 - Deep navy (`#1a1a2e`, `#16213e`, `#0f3460`) hero sections that feel premium and trustworthy
 - Warm orange (`#F97316`, `#EA580C`) as the action/accent color — used for CTAs, highlights, hover states, active tabs
 - Clean white content cards on light gray backgrounds below the hero — not everything is dark
@@ -24,6 +26,7 @@ CollegeDekho is your primary visual and UX inspiration. Understand what makes it
 - Trust signals everywhere: NIRF ranks, Google ratings, review counts, placement stats
 
 **Your design is NOT a clone of CollegeDekho.** It is inspired by it. Your platform is called **CollegeCompass**. It has its own identity:
+
 - More student-voice, less corporate. Tone is like a smart senior who's been through JEE/NEET helping a junior.
 - Typography is crisper and more readable. Use `Inter` from Google Fonts.
 - Slightly more whitespace in card bodies.
@@ -51,6 +54,7 @@ colors: {
 ```
 
 Usage rules:
+
 - `brand-navy` — hero backgrounds, navbar, compare tray, footer
 - `brand-orange` — all primary CTAs, active states, hover borders, accent text, badges
 - White (`#ffffff`) — card surfaces
@@ -66,11 +70,12 @@ Usage rules:
 Install and apply `Inter` via `next/font/google`:
 
 ```ts
-import { Inter } from 'next/font/google'
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+import { Inter } from "next/font/google";
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 ```
 
 Scale:
+
 - `text-xs` (12px) — meta labels, chips, tags
 - `text-sm` (14px) — body copy, card descriptions, nav links
 - `text-base` (16px) — card titles, section labels
@@ -89,16 +94,19 @@ Font weights: `font-normal` (400) for body, `font-medium` (500) for titles and l
 Build a sticky top navbar. Height: 60px.
 
 **Desktop layout:**
+
 - Left: CollegeCompass logo (orange dot + wordmark where "Compass" is orange)
 - Center: navigation links — Colleges · Compare · Saved · [if auth: My Profile]
 - Right: Search icon (opens search modal on click) + Sign In button (orange pill) or User avatar dropdown
 
 **Mobile layout:**
+
 - Left: Logo
 - Right: Search icon + Hamburger menu
 - Hamburger opens a full-height slide-in drawer from the right with all nav links and auth CTA
 
 **Styling:**
+
 - Background: `brand-navy` with `backdrop-blur` on scroll (add `bg-opacity-95`)
 - Nav links: `text-sm text-slate-400 hover:text-white transition-colors`
 - Active nav link: `text-brand-orange font-medium`
@@ -107,6 +115,7 @@ Build a sticky top navbar. Height: 60px.
 ### Footer
 
 Three-column layout on desktop, stacked on mobile.
+
 - Col 1: Logo + tagline + social icons (use lucide-react icons for social)
 - Col 2: Quick links (Colleges, Compare, Saved, Sign In)
 - Col 3: About, Contact, Privacy Policy
@@ -130,29 +139,36 @@ Add a subtle dot-grid pattern overlay using a CSS `background-image: radial-grad
 **Inside the hero:**
 
 Top badge pill:
+
 ```
 ✦  India's student-first college guide
 ```
+
 Styled as: `bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-full text-xs px-3 py-1 inline-flex items-center gap-2`
 
 Headline (H1):
+
 ```
 Right guidance,
 brighter future.
 ```
+
 "brighter future." in `text-brand-orange`. Font: `text-4xl font-semibold text-white leading-tight`.
 
 Subheading (below H1):
+
 ```
 Real placement data, honest reviews, and zero sponsored fluff.
 Find your college without the noise.
 ```
+
 Style: `text-sm text-slate-400 leading-relaxed max-w-md`
 
 **Search bar** (the most important element on the page):
 Wrap in a card: `bg-white/8 border border-white/10 rounded-2xl p-3 max-w-2xl mx-auto mt-6`
 
 Inside: a white inner row with search icon, text input, and orange "Search" button.
+
 - Input placeholder: `"Search college name, course, city, or exam..."`
 - On submit: navigate to `/colleges?search=[query]`
 
@@ -209,13 +225,16 @@ Button: white pill button with orange text → links to `/colleges`
 #### Layout
 
 Two-panel layout on desktop:
+
 - Left: Filters sidebar (240px wide, sticky)
 - Right: Results area (flex-1)
 
 On mobile: filters collapse into a slide-up bottom sheet triggered by a "Filters" button in a sticky top bar.
 
 #### Sticky top bar (mobile only)
+
 `bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between sticky top-[60px] z-10`
+
 - Left: result count — "Showing 48 colleges"
 - Right: "Filters" button (outlined orange) + Sort dropdown
 
@@ -255,11 +274,13 @@ Filter actions at bottom: `Clear all filters` (text link in orange) — no Apply
 **College cards** — 1 column on mobile, 2 columns on desktop. Full CollegeCard component (see below).
 
 **Pagination:**
+
 - Show 12 per page
 - Pagination at bottom: Prev · 1 · 2 · 3 · ... · Next
 - Active page: orange filled pill. Others: outlined gray.
 
 **Empty state** (when filters return 0 results):
+
 - Centered, illustrated SVG (draw a simple compass icon in orange)
 - "No colleges match your filters"
 - "Try removing some filters or broadening your search."
@@ -290,6 +311,7 @@ This is the most-rendered component. Get it perfect.
 ```
 
 **Banner colors by stream:**
+
 - Engineering: `from-[#1a1a2e] to-[#0f3460]`
 - Medical: `from-[#064e3b] to-[#065f46]`
 - Management: `from-[#1e1b4b] to-[#312e81]`
@@ -305,6 +327,7 @@ Only show if `nurfRanking <= 200`.
 **Save button:** Heart icon `top-2 right-2`. Filled orange if saved, outline if not. Clicking triggers optimistic UI save/unsave.
 
 **Chips:**
+
 - Course type: `bg-blue-50 text-blue-700 text-[10px] px-2 py-0.5 rounded`
 - Fees: `bg-green-50 text-green-700 text-[10px] px-2 py-0.5 rounded`
 - Avg package: `bg-orange-50 text-orange-700 text-[10px] px-2 py-0.5 rounded`
@@ -322,6 +345,7 @@ On click: adds college to compare tray (Zustand). If tray already has 3, show a 
 ### Page 3 — College Detail (`/colleges/[slug]`)
 
 #### Breadcrumb
+
 `Home › Colleges › [College Name]`
 `text-xs text-gray-400` with `›` separators. College name in `text-gray-700`.
 
@@ -330,6 +354,7 @@ On click: adds college to compare tray (Zustand). If tray already has 3, show a 
 Background: the stream's banner color (same gradient as card banner). Full-width, 200px tall.
 
 Inside:
+
 - College name: `text-2xl font-semibold text-white`
 - Location with pin icon: `text-sm text-white/70`
 - Quick stat pills (inline, white/transparent outlined):
@@ -344,12 +369,14 @@ Active tab: orange bottom border (`border-b-2 border-brand-orange text-brand-ora
 Inactive: `text-gray-500 hover:text-gray-800`
 
 Right: Two buttons:
+
 - `♡ Save college` — outlined orange, fills on save
 - `⊞ Compare` — outlined gray, adds to tray
 
 #### Tab content panels
 
 **Overview tab:**
+
 - "About" section: `text-sm text-gray-600 leading-relaxed` — college description
 - Key facts grid (2×3 on desktop, 2×3 stacked mobile):
   - Established · Ownership (Govt/Private/Deemed) · Campus size · Accreditations · Website · Phone
@@ -360,6 +387,7 @@ Right: Two buttons:
 Table with columns: Course · Type · Duration · Annual Fees · Seats · Eligibility
 
 Style the table:
+
 - Header: `bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wide`
 - Rows: alternating `bg-white` / `bg-gray-50/50`
 - Fees column: `font-medium text-gray-900`
@@ -367,6 +395,7 @@ Style the table:
 
 **Placements tab:**
 Top stats bar — 3 cards:
+
 - Average Package: `text-2xl font-bold text-gray-900` + `₹ X LPA`
 - Highest Package: same
 - Placement %: `XX%` in large text
@@ -375,6 +404,7 @@ Below: Top recruiters as a grid of logo placeholder boxes (gray rounded squares 
 
 **Reviews tab:**
 Aggregate rating card at top:
+
 - Large rating number on left (`text-5xl font-bold`)
 - Star breakdown bars on right (5★ to 1★ with fill bars in orange)
 - Total review count below
@@ -390,7 +420,9 @@ Write a review CTA at bottom (if logged in): simple inline form with star select
 ### Page 4 — Compare (`/compare`)
 
 #### Empty state (no colleges added yet)
+
 Centered:
+
 - Large compass SVG illustration (draw in orange/navy)
 - "Your compare tray is empty"
 - "Browse colleges and tap + Compare to add them here"
@@ -406,6 +438,7 @@ Show "Add a college" column with a search input to find and add more.
 Sticky first column with row labels. Each subsequent column = one college.
 
 College header (top of each column):
+
 - Mini banner (stream color, 60px) with college name overlay
 - "Remove" × button top-right
 - "View detail →" link below name
@@ -413,24 +446,29 @@ College header (top of each column):
 Rows (grouped into sections with section headers):
 
 **Overview**
+
 - NIRF Ranking
 - Overall Rating (stars)
 - Established
 - Ownership
 
 **Fees**
+
 - Min Annual Fees
 - Max Annual Fees
 
 **Placements**
+
 - Average Package
 - Highest Package
 - Placement %
 
 **Courses**
+
 - Available streams (chips)
 
 Highlight rules:
+
 - Best value (lowest min fees): cell gets `bg-green-50 text-green-800 font-medium`
 - Top rated (highest rating): cell gets `bg-orange-50 text-orange-800 font-medium`
 - Best placement: cell gets `bg-blue-50 text-blue-800 font-medium`
@@ -444,6 +482,7 @@ Highlight rules:
 ### Page 5 — Saved (`/saved`)
 
 **If not logged in:**
+
 - Full-page centered state
 - "Sign in to save colleges"
 - Subtext: "Create a free account to save colleges, build shortlists, and track your college journey."
@@ -451,6 +490,7 @@ Highlight rules:
 - Below: "Continue browsing →" text link
 
 **If logged in, no saved colleges:**
+
 - Centered empty state with bookmark illustration
 - "You haven't saved any colleges yet"
 - "Browse colleges →" button
@@ -458,6 +498,7 @@ Highlight rules:
 **If logged in, has saved colleges:**
 
 Collections selector at top:
+
 - "All saved" tab (default) + each collection as a tab
 - "+ New collection" button — opens a modal with just a text input for collection name
 
@@ -522,14 +563,19 @@ Keep all animations under 250ms. No bouncy spring physics. Clean, purposeful, fa
 ## Loading & Error States
 
 ### Skeleton pattern
+
 All skeletons use:
+
 ```tsx
 <div className="animate-pulse bg-gray-200 rounded" style={{ height: Xpx }} />
 ```
+
 Skeleton cards must match the exact dimensions and structure of real CollegeCards — placeholder for banner, name, location, chips, and footer.
 
 ### Error pattern
+
 If an API call fails, show an inline error state (not a full-page error):
+
 - Gray warning icon
 - "Something went wrong loading colleges."
 - "Try again →" button that retries the query (TanStack Query `.refetch()`)
@@ -540,11 +586,11 @@ Never show raw error messages or stack traces to the user.
 
 ## Responsiveness Rules
 
-| Breakpoint | Behavior |
-|---|---|
-| `< 640px` (mobile) | 1-column card grid, filter bottom sheet, hamburger nav, horizontal-scroll stream pills |
-| `640px–1024px` (tablet) | 2-column card grid, filter bottom sheet, full nav |
-| `> 1024px` (desktop) | 3-column card grid, sticky filter sidebar, full nav |
+| Breakpoint              | Behavior                                                                               |
+| ----------------------- | -------------------------------------------------------------------------------------- |
+| `< 640px` (mobile)      | 1-column card grid, filter bottom sheet, hamburger nav, horizontal-scroll stream pills |
+| `640px–1024px` (tablet) | 2-column card grid, filter bottom sheet, full nav                                      |
+| `> 1024px` (desktop)    | 3-column card grid, sticky filter sidebar, full nav                                    |
 
 Test every page at 375px (iPhone SE), 768px (iPad), and 1440px (desktop).
 
@@ -611,6 +657,7 @@ Execute in this exact sequence. Do not skip ahead.
 ## Definition of Done
 
 Each page is done when:
+
 - [ ] Renders correctly at 375px, 768px, and 1440px
 - [ ] All interactive states work: hover, focus, active, loading, error, empty
 - [ ] No TypeScript errors

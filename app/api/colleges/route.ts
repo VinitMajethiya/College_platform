@@ -9,7 +9,10 @@ export async function GET(request: NextRequest) {
 
   if (!parsed.success) {
     return NextResponse.json(
-      { data: null, error: { message: "Invalid filters", details: parsed.error.flatten() } },
+      {
+        data: null,
+        error: { message: "Invalid filters", details: parsed.error.flatten() }
+      },
       { status: 400 }
     );
   }

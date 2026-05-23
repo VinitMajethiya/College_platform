@@ -5,7 +5,10 @@ dotenv.config({ path: ".env" });
 
 import { colleges } from "../lib/sample-data";
 
-console.log("Seeding Database URL:", process.env.DATABASE_URL?.replace(/:[^:@]*@/, ":***@"));
+console.log(
+  "Seeding Database URL:",
+  process.env.DATABASE_URL?.replace(/:[^:@]*@/, ":***@")
+);
 
 const prisma = new PrismaClient({
   datasources: {

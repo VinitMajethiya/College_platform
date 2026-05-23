@@ -10,16 +10,19 @@ export default async function CollegesPage({
   const params = Object.fromEntries(
     Object.entries(searchParams).map(([key, value]) => [
       key,
-      Array.isArray(value) ? value.join(",") : value ?? ""
+      Array.isArray(value) ? value.join(",") : (value ?? "")
     ])
   );
-  
+
   const query = collegeListQuerySchema.parse(params);
   const result = await listColleges(query);
 
   return (
     <main className="min-h-screen bg-[#f7f9fc]">
-      <CollegesClient colleges={result.colleges} pagination={result.pagination} />
+      <CollegesClient
+        colleges={result.colleges}
+        pagination={result.pagination}
+      />
     </main>
   );
 }

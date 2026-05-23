@@ -2,16 +2,23 @@ import { Mail } from "lucide-react";
 
 import { signIn } from "@/lib/auth";
 
-export default function SignInPage({ searchParams }: { searchParams: { callbackUrl?: string } }) {
+export default function SignInPage({
+  searchParams
+}: {
+  searchParams: { callbackUrl?: string };
+}) {
   const callbackUrl = searchParams.callbackUrl ?? "/";
 
   return (
     <main className="min-h-screen bg-[#f7f9fc] px-4 py-16">
       <div className="mx-auto max-w-md rounded-[8px] border border-slate-200 bg-white p-8 shadow-sm">
         <p className="text-sm font-semibold text-brand-gold">Student account</p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-normal text-slate-950">Sign in to UniVerdict</h1>
+        <h1 className="mt-2 text-3xl font-semibold tracking-normal text-slate-950">
+          Sign in to UniVerdict
+        </h1>
         <p className="mt-3 text-sm leading-6 text-slate-600">
-          Save colleges, build shortlists, and continue your admission research across devices.
+          Save colleges, build shortlists, and continue your admission research
+          across devices.
         </p>
 
         <form
@@ -43,7 +50,9 @@ export default function SignInPage({ searchParams }: { searchParams: { callbackU
             await signIn("nodemailer", { email, redirectTo: callbackUrl });
           }}
         >
-          <label htmlFor="email" className="sr-only">Email address</label>
+          <label htmlFor="email" className="sr-only">
+            Email address
+          </label>
           <div className="relative">
             <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
             <input

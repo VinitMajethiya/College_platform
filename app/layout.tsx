@@ -6,7 +6,7 @@ import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-inter"
 });
 
 export const metadata: Metadata = {
@@ -17,7 +17,11 @@ export const metadata: Metadata = {
   description: "Find your perfect college. Make your best decision."
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body className="font-sans antialiased bg-gray-50 text-gray-900">

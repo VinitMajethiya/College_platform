@@ -93,7 +93,9 @@ export function SearchModal() {
       setSelectedIndex((prev) => (prev + 1 >= colleges.length ? 0 : prev + 1));
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      setSelectedIndex((prev) => (prev - 1 < 0 ? colleges.length - 1 : prev - 1));
+      setSelectedIndex((prev) =>
+        prev - 1 < 0 ? colleges.length - 1 : prev - 1
+      );
     } else if (e.key === "Enter") {
       e.preventDefault();
       if (selectedIndex >= 0 && selectedIndex < colleges.length) {
@@ -121,7 +123,10 @@ export function SearchModal() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-start justify-center pt-24" onClick={close}>
+    <div
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-start justify-center pt-24"
+      onClick={close}
+    >
       <div
         className="bg-white rounded-2xl w-full max-w-xl mx-4 overflow-hidden shadow-2xl border border-gray-100 flex flex-col max-h-[500px]"
         onClick={(e) => e.stopPropagation()}
@@ -157,7 +162,10 @@ export function SearchModal() {
         </div>
 
         {/* Results area */}
-        <div className="overflow-y-auto flex-1 p-5 space-y-5" ref={resultsContainerRef}>
+        <div
+          className="overflow-y-auto flex-1 p-5 space-y-5"
+          ref={resultsContainerRef}
+        >
           {query.trim().length === 0 ? (
             <div>
               <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
@@ -178,7 +186,10 @@ export function SearchModal() {
           ) : isLoading ? (
             <div className="space-y-3">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className="animate-pulse flex items-center justify-between p-3 border border-gray-100 rounded-xl bg-gray-50/50">
+                <div
+                  key={i}
+                  className="animate-pulse flex items-center justify-between p-3 border border-gray-100 rounded-xl bg-gray-50/50"
+                >
                   <div className="space-y-2 flex-1 mr-4">
                     <div className="h-4 bg-gray-200 rounded w-2/3"></div>
                     <div className="h-3 bg-gray-200 rounded w-1/3"></div>
@@ -209,7 +220,9 @@ export function SearchModal() {
                     }}
                   >
                     <div className="flex-1 mr-4">
-                      <h4 className="text-sm font-medium leading-snug">{college.name}</h4>
+                      <h4 className="text-sm font-medium leading-snug">
+                        {college.name}
+                      </h4>
                       <p className="text-xs text-gray-500 flex items-center gap-1 mt-1">
                         <MapPin className="h-3 w-3 inline flex-shrink-0" />
                         {college.city}, {college.state}

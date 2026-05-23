@@ -37,7 +37,8 @@ export const useCompareStore = create<CompareStore>()(
         set({ items: [...items, item] });
         toast.success("Added to compare");
       },
-      remove: (id) => set({ items: get().items.filter((item) => item.id !== id) }),
+      remove: (id) =>
+        set({ items: get().items.filter((item) => item.id !== id) }),
       clear: () => set({ items: [] }),
       has: (id) => get().items.some((item) => item.id === id)
     }),

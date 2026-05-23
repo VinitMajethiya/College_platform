@@ -17,13 +17,14 @@ export function CompareTray() {
     <aside
       className={cn(
         "fixed inset-x-0 bottom-0 z-40 bg-brand-navy border-t border-white/10 px-6 py-4 transition-all duration-300 ease-out transform shadow-2xl",
-        hasItems ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none"
+        hasItems
+          ? "translate-y-0 opacity-100"
+          : "translate-y-full opacity-0 pointer-events-none"
       )}
       role="region"
       aria-label="Compare tray"
     >
       <div className="mx-auto flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        
         {/* Left Side: Title and Pills */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 flex-grow">
           <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 flex-shrink-0 select-none">

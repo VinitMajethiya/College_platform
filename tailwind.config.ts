@@ -2,7 +2,11 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   darkMode: ["class"],
-  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./hooks/**/*.{ts,tsx}"],
+  content: [
+    "./app/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./hooks/**/*.{ts,tsx}"
+  ],
   theme: {
     extend: {
       colors: {
@@ -14,19 +18,19 @@ const config: Config = {
           foreground: "#FFFFFF"
         },
         brand: {
-          navy:     '#1B3566',
-          navyMid:  '#152D5A',
-          navyDeep: '#0F2247',
-          navyLight:'#243F78',
-          gold:         '#C9A227',
-          goldHover:    '#B8911E',
-          goldLight:    '#FBF4E0',
-          goldMuted:    'rgba(201,162,39,0.12)',
+          navy: "#1B3566",
+          navyMid: "#152D5A",
+          navyDeep: "#0F2247",
+          navyLight: "#243F78",
+          gold: "#C9A227",
+          goldHover: "#B8911E",
+          goldLight: "#FBF4E0",
+          goldMuted: "rgba(201,162,39,0.12)",
           // Legacy aliases for backward-compat (map orange → gold)
-          orange:       '#C9A227',
-          orangeHover:  '#B8911E',
-          orangeLight:  '#FBF4E0',
-          orangeMuted:  'rgba(201,162,39,0.12)',
+          orange: "#C9A227",
+          orangeHover: "#B8911E",
+          orangeLight: "#FBF4E0",
+          orangeMuted: "rgba(201,162,39,0.12)"
         }
       },
       fontFamily: {

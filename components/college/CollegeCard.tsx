@@ -22,7 +22,11 @@ export function CollegeCard({ college }: { college: College }) {
   else if (courseTypes.includes("medical")) stream = "medical";
   else if (courseTypes.includes("management")) stream = "management";
   else if (courseTypes.includes("law")) stream = "law";
-  else if (courseTypes.includes("arts") || courseTypes.includes("arts & humanities")) stream = "arts";
+  else if (
+    courseTypes.includes("arts") ||
+    courseTypes.includes("arts & humanities")
+  )
+    stream = "arts";
   else if (courseTypes.includes("science")) stream = "science";
   else if (courseTypes.includes("commerce")) stream = "commerce";
   else if (courseTypes.includes("architecture")) stream = "architecture";
@@ -48,9 +52,15 @@ export function CollegeCard({ college }: { college: College }) {
 
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-[8px] border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-brand-gold hover:shadow-soft">
-      <Link href={`/colleges/${college.slug}`} className="block relative h-32 overflow-hidden select-none">
+      <Link
+        href={`/colleges/${college.slug}`}
+        className="block relative h-32 overflow-hidden select-none"
+      >
         <Image
-          src={college.imageUrl || `/images/colleges/${["engineering", "medical", "management", "law"].includes(stream) ? stream : "default"}.png`}
+          src={
+            college.imageUrl ||
+            `/images/colleges/${["engineering", "medical", "management", "law"].includes(stream) ? stream : "default"}.png`
+          }
           alt={college.name}
           fill
           sizes="(max-width: 768px) 100vw, 30vw"
@@ -104,14 +114,20 @@ export function CollegeCard({ college }: { college: College }) {
                     key={i}
                     className={cn(
                       "h-3.5 w-3.5",
-                      isFilled ? "fill-amber-400 text-amber-400" : "text-gray-200"
+                      isFilled
+                        ? "fill-amber-400 text-amber-400"
+                        : "text-gray-200"
                     )}
                   />
                 );
               })}
             </span>
-            <span className="ml-1 text-xs font-semibold text-slate-700">{college.rating.toFixed(1)}</span>
-            <span className="text-xs text-slate-400">({college.reviewCount})</span>
+            <span className="ml-1 text-xs font-semibold text-slate-700">
+              {college.rating.toFixed(1)}
+            </span>
+            <span className="text-xs text-slate-400">
+              ({college.reviewCount})
+            </span>
           </div>
 
           <button

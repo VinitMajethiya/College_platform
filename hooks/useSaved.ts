@@ -32,7 +32,8 @@ export function useSaveCollege() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ collegeId })
       });
-      if (res.status === 401) throw new Error("Please sign in to save colleges");
+      if (res.status === 401)
+        throw new Error("Please sign in to save colleges");
       if (!res.ok) throw new Error("Failed to save college");
       return res.json();
     },
@@ -50,7 +51,8 @@ export function useUnsaveCollege() {
       const res = await fetch(`/api/saved/${collegeId}`, {
         method: "DELETE"
       });
-      if (res.status === 401) throw new Error("Please sign in to save colleges");
+      if (res.status === 401)
+        throw new Error("Please sign in to save colleges");
       if (!res.ok) throw new Error("Failed to remove saved college");
       return res.json();
     },
@@ -84,7 +86,8 @@ export function useCreateCollection() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name })
       });
-      if (res.status === 401) throw new Error("Please sign in to manage collections");
+      if (res.status === 401)
+        throw new Error("Please sign in to manage collections");
       if (!res.ok) throw new Error("Failed to create collection");
       return res.json();
     },
@@ -98,13 +101,20 @@ export function useAssignCollection() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ collectionId, collegeId }: { collectionId: string; collegeId: string }) => {
+    mutationFn: async ({
+      collectionId,
+      collegeId
+    }: {
+      collectionId: string;
+      collegeId: string;
+    }) => {
       const res = await fetch(`/api/collections/${collectionId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ collegeId })
       });
-      if (res.status === 401) throw new Error("Please sign in to manage collections");
+      if (res.status === 401)
+        throw new Error("Please sign in to manage collections");
       if (!res.ok) throw new Error("Failed to assign college to collection");
       return res.json();
     },

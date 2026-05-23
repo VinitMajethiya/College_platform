@@ -8,14 +8,20 @@ import { saveCollegeSchema } from "@/lib/validations/saved";
 export async function GET() {
   const session = await auth();
   if (!session?.user?.email) {
-    return NextResponse.json({ data: null, error: { message: "Authentication required" } }, { status: 401 });
+    return NextResponse.json(
+      { data: null, error: { message: "Authentication required" } },
+      { status: 401 }
+    );
   }
 
   const user = await prisma.user.findUnique({
     where: { email: session.user.email }
   });
   if (!user) {
-    return NextResponse.json({ data: null, error: { message: "User not found" } }, { status: 404 });
+    return NextResponse.json(
+      { data: null, error: { message: "User not found" } },
+      { status: 404 }
+    );
   }
 
   const savedColleges = await prisma.savedCollege.findMany({
@@ -48,20 +54,29 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   const session = await auth();
   if (!session?.user?.email) {
-    return NextResponse.json({ data: null, error: { message: "Authentication required" } }, { status: 401 });
+    return NextResponse.json(
+      { data: null, error: { message: "Authentication required" } },
+      { status: 401 }
+    );
   }
 
   const user = await prisma.user.findUnique({
     where: { email: session.user.email }
   });
   if (!user) {
-    return NextResponse.json({ data: null, error: { message: "User not found" } }, { status: 404 });
+    return NextResponse.json(
+      { data: null, error: { message: "User not found" } },
+      { status: 404 }
+    );
   }
 
   const body = await request.json();
   const parsed = saveCollegeSchema.safeParse(body);
   if (!parsed.success) {
-    return NextResponse.json({ data: null, error: { message: "Invalid college id" } }, { status: 400 });
+    return NextResponse.json(
+      { data: null, error: { message: "Invalid college id" } },
+      { status: 400 }
+    );
   }
 
   await prisma.savedCollege.upsert({
@@ -78,5 +93,8 @@ export async function POST(request: NextRequest) {
     }
   });
 
-  return NextResponse.json({ data: { collegeId: parsed.data.collegeId }, error: null }, { status: 201 });
+  return NextResponse.json(
+    { data: { collegeId: parsed.data.collegeId }, error: null },
+    { status: 201 }
+  );
 }

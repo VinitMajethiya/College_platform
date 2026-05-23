@@ -97,7 +97,10 @@ describe("listColleges", () => {
   });
 
   it("sorts by lowest fees", async () => {
-    vi.mocked(prisma.$transaction).mockResolvedValueOnce([[mockCollege2, mockCollege1], 2]);
+    vi.mocked(prisma.$transaction).mockResolvedValueOnce([
+      [mockCollege2, mockCollege1],
+      2
+    ]);
 
     const result = await listColleges({
       search: "",
@@ -108,6 +111,8 @@ describe("listColleges", () => {
       sort: "fees-asc"
     });
 
-    expect(result.colleges[0].annualFeesMin).toBeLessThanOrEqual(result.colleges[1].annualFeesMin);
+    expect(result.colleges[0].annualFeesMin).toBeLessThanOrEqual(
+      result.colleges[1].annualFeesMin
+    );
   });
 });

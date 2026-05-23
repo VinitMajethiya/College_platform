@@ -1,4 +1,5 @@
 # UniVerdict — College Discovery Platform
+
 ## Project Specification for AI Agent
 
 ---
@@ -13,19 +14,19 @@ Build a production-grade College Discovery Platform called **UniVerdict**. This 
 
 ## Tech Stack (non-negotiable)
 
-| Layer | Technology |
-|---|---|
-| Framework | Next.js 14 (App Router, TypeScript) |
-| Styling | Tailwind CSS + shadcn/ui |
-| State | Zustand (client) + TanStack Query (server state) |
-| Backend | Next.js API Routes |
-| ORM | Prisma |
-| Database | Supabase (PostgreSQL) |
-| Auth | NextAuth.js v5 (Google + GitHub OAuth) |
-| Validation | Zod (all API inputs) |
-| Deployment | Vercel |
-| Testing | Vitest (unit) + Playwright (E2E) |
-| Code quality | ESLint + Prettier + Husky + lint-staged |
+| Layer        | Technology                                       |
+| ------------ | ------------------------------------------------ |
+| Framework    | Next.js 14 (App Router, TypeScript)              |
+| Styling      | Tailwind CSS + shadcn/ui                         |
+| State        | Zustand (client) + TanStack Query (server state) |
+| Backend      | Next.js API Routes                               |
+| ORM          | Prisma                                           |
+| Database     | Supabase (PostgreSQL)                            |
+| Auth         | NextAuth.js v5 (Google + GitHub OAuth)           |
+| Validation   | Zod (all API inputs)                             |
+| Deployment   | Vercel                                           |
+| Testing      | Vitest (unit) + Playwright (E2E)                 |
+| Code quality | ESLint + Prettier + Husky + lint-staged          |
 
 ---
 
@@ -36,6 +37,7 @@ Build a production-grade College Discovery Platform called **UniVerdict**. This 
 **Route:** `/colleges`
 
 **What to build:**
+
 - Paginated grid of college cards (12 per page, with infinite scroll on mobile)
 - Each card shows: college name, location (city, state), fees (annual), NIRF ranking, rating (1–5 stars), and course count
 - Full-text search bar (debounced 300ms, searches name + location + courses)
@@ -60,6 +62,7 @@ Build a production-grade College Discovery Platform called **UniVerdict**. This 
 **Route:** `/colleges/[slug]`
 
 **What to build:**
+
 - Hero section: college name, location, banner image placeholder (gradient), quick stats bar
 - Tabbed content (Overview / Courses / Placements / Reviews):
   - **Overview tab:** About text, accreditations, campus area, established year, contact info
@@ -81,6 +84,7 @@ Build a production-grade College Discovery Platform called **UniVerdict**. This 
 **Route:** `/compare`
 
 **What to build:**
+
 - Floating compare tray (bottom of screen) that appears when 1+ colleges are added — shows college names + remove button, "Compare Now" CTA
 - Maximum 3 colleges in comparison at once
 - Full comparison page: side-by-side table with these rows:
@@ -115,6 +119,7 @@ Build a production-grade College Discovery Platform called **UniVerdict**. This 
 **What to build:**
 
 **Auth:**
+
 - Sign in with Google (primary)
 - Sign in with GitHub (secondary)
 - Protected routes redirect to `/auth/signin?callbackUrl=...`
@@ -122,6 +127,7 @@ Build a production-grade College Discovery Platform called **UniVerdict**. This 
 - Middleware-based route protection
 
 **Saved Colleges:**
+
 - Heart icon on every college card and detail page
 - Optimistic UI: heart fills instantly, API call in background
 - `/saved` page: grid of saved colleges, same card design as listing
@@ -130,6 +136,7 @@ Build a production-grade College Discovery Platform called **UniVerdict**. This 
 - Empty state with CTA to browse colleges
 
 **API:**
+
 - `POST /api/saved` — save a college (auth required)
 - `DELETE /api/saved/[collegeId]` — unsave (auth required)
 - `GET /api/saved` — get user's saved colleges (auth required)
@@ -342,6 +349,7 @@ collegecompass/
 ## Seed Data Requirements
 
 The seed script (`prisma/seed.ts`) must insert at least **50 realistic Indian colleges** covering:
+
 - IITs (at least 5 different IITs)
 - NITs (at least 5)
 - IIMs (at least 3)
@@ -351,6 +359,7 @@ The seed script (`prisma/seed.ts`) must insert at least **50 realistic Indian co
 - Spread across at least 10 Indian states
 
 Each college must have:
+
 - At least 3 courses
 - At least 2 reviews
 - Realistic fees, placement data, and rankings
@@ -360,6 +369,7 @@ Each college must have:
 ## UI/UX Requirements
 
 ### Design system
+
 - Color palette: Primary `#2563EB` (blue), Accent `#10B981` (green), Neutral grays
 - Font: Inter (Google Fonts)
 - Dark mode: supported via Tailwind `dark:` classes + `next-themes`
@@ -367,6 +377,7 @@ Each college must have:
 - Accessible: WCAG AA — proper ARIA labels, keyboard navigation, focus rings
 
 ### Component standards
+
 - All interactive elements have hover + focus + active states
 - Loading states: skeleton loaders (not spinners) for content, button loading states for actions
 - Error states: friendly error messages with retry options
@@ -376,6 +387,7 @@ Each college must have:
 ### Pages
 
 **Home (`/`):**
+
 - Hero with search bar (large, centered) — searching redirects to `/colleges?search=`
 - Stats bar: "500+ colleges · 20+ states · 50K+ student reviews"
 - Featured colleges section (6 cards, curated)
@@ -383,6 +395,7 @@ Each college must have:
 - CTA section: "Start exploring" button
 
 **Navbar:**
+
 - Logo (left) + navigation links (Colleges, Compare, Saved) + auth button
 - Mobile: hamburger menu with slide-out drawer
 - Search icon that expands to inline search on mobile
@@ -393,6 +406,7 @@ Each college must have:
 ## API Design
 
 All API routes must:
+
 - Validate input with Zod (return 400 with validation errors)
 - Return consistent response shape: `{ data: ..., error: null }` or `{ data: null, error: { message: ... } }`
 - Use proper HTTP status codes (200, 201, 400, 401, 403, 404, 500)

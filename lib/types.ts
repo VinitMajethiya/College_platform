@@ -1,4 +1,10 @@
-export type CourseType = "Engineering" | "Medical" | "Management" | "Arts" | "Science" | "Law";
+export type CourseType =
+  | "Engineering"
+  | "Medical"
+  | "Management"
+  | "Arts"
+  | "Science"
+  | "Law";
 
 export type Course = {
   id: string;

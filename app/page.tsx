@@ -192,9 +192,16 @@ export default async function HomePage() {
 
           <div className="grid gap-3 border-t border-white/14 pt-6 sm:grid-cols-2 lg:grid-cols-4">
             {proofPoints.map((item) => (
-              <div key={item.label} className="rounded-[8px] bg-white/9 px-4 py-3 backdrop-blur">
-                <p className="text-2xl font-semibold text-white">{item.value}</p>
-                <p className="mt-1 text-xs font-medium text-slate-300">{item.label}</p>
+              <div
+                key={item.label}
+                className="rounded-[8px] bg-white/9 px-4 py-3 backdrop-blur"
+              >
+                <p className="text-2xl font-semibold text-white">
+                  {item.value}
+                </p>
+                <p className="mt-1 text-xs font-medium text-slate-300">
+                  {item.label}
+                </p>
               </div>
             ))}
           </div>
@@ -214,8 +221,12 @@ export default async function HomePage() {
                   <p className="text-xs font-semibold uppercase tracking-wide text-brand-gold">
                     Step {index + 1}
                   </p>
-                  <h2 className="mt-1 text-lg font-semibold text-slate-950">{step.title}</h2>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">{step.body}</p>
+                  <h2 className="mt-1 text-lg font-semibold text-slate-950">
+                    {step.title}
+                  </h2>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                    {step.body}
+                  </p>
                 </div>
               </div>
             );
@@ -226,7 +237,9 @@ export default async function HomePage() {
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-sm font-semibold text-brand-gold">Explore streams</p>
+            <p className="text-sm font-semibold text-brand-gold">
+              Explore streams
+            </p>
             <h2 className="mt-2 text-3xl font-semibold tracking-normal text-slate-950">
               Find the path that fits your next few years
             </h2>
@@ -254,8 +267,12 @@ export default async function HomePage() {
                     <Icon className="h-5 w-5" />
                   </span>
                   <span>
-                    <span className="block text-base font-semibold text-slate-950">{stream.label}</span>
-                    <span className="mt-2 block text-sm leading-6 text-slate-600">{stream.detail}</span>
+                    <span className="block text-base font-semibold text-slate-950">
+                      {stream.label}
+                    </span>
+                    <span className="mt-2 block text-sm leading-6 text-slate-600">
+                      {stream.detail}
+                    </span>
                   </span>
                 </div>
               </Link>
@@ -300,7 +317,9 @@ export default async function HomePage() {
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <div>
-            <p className="text-sm font-semibold text-brand-gold">Why it feels calmer</p>
+            <p className="text-sm font-semibold text-brand-gold">
+              Why it feels calmer
+            </p>
             <h2 className="mt-2 text-3xl font-semibold tracking-normal text-slate-950">
               Information that is easy to scan, compare, and trust
             </h2>
@@ -326,7 +345,9 @@ export default async function HomePage() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="rounded-[8px] border border-slate-200 bg-white p-6">
               <GraduationCap className="h-6 w-6 text-brand-navy" />
-              <h3 className="mt-5 text-lg font-semibold text-slate-950">For admissions season</h3>
+              <h3 className="mt-5 text-lg font-semibold text-slate-950">
+                For admissions season
+              </h3>
               <p className="mt-2 text-sm leading-6 text-slate-600">
                 Move from broad search to a practical shortlist without losing
                 track of deadlines, costs, and course fit.
@@ -334,7 +355,9 @@ export default async function HomePage() {
             </div>
             <div className="rounded-[8px] border border-slate-200 bg-white p-6">
               <MapPin className="h-6 w-6 text-brand-navy" />
-              <h3 className="mt-5 text-lg font-semibold text-slate-950">Location aware</h3>
+              <h3 className="mt-5 text-lg font-semibold text-slate-950">
+                Location aware
+              </h3>
               <p className="mt-2 text-sm leading-6 text-slate-600">
                 Make city, distance, campus life, and daily affordability part
                 of the decision from the beginning.
@@ -342,7 +365,9 @@ export default async function HomePage() {
             </div>
             <div className="rounded-[8px] border border-slate-200 bg-white p-6 sm:col-span-2">
               <UsersRound className="h-6 w-6 text-brand-navy" />
-              <h3 className="mt-5 text-lg font-semibold text-slate-950">Readable by students and parents</h3>
+              <h3 className="mt-5 text-lg font-semibold text-slate-950">
+                Readable by students and parents
+              </h3>
               <p className="mt-2 text-sm leading-6 text-slate-600">
                 Clean sections, plain labels, and direct comparisons help
                 everyone understand the same information quickly.
@@ -359,8 +384,8 @@ export default async function HomePage() {
               Build a shortlist you can explain clearly.
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
-              Search colleges, compare the important numbers, and keep your
-              best options ready before counselling or applications begin.
+              Search colleges, compare the important numbers, and keep your best
+              options ready before counselling or applications begin.
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">

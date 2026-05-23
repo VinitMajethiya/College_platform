@@ -1,6 +1,15 @@
 "use client";
 
-import { Heart, Menu, Search, Scale, X, LogOut, Bookmark, User } from "lucide-react";
+import {
+  Heart,
+  Menu,
+  Search,
+  Scale,
+  X,
+  LogOut,
+  Bookmark,
+  User
+} from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
@@ -15,7 +24,7 @@ export function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  
+
   const { data: session, status } = useSession();
   const compareCount = useCompareStore((state) => state.items.length);
   const openSearch = useSearchStore((state) => state.open);
@@ -24,15 +33,19 @@ export function Navbar() {
     { label: "Colleges", href: "/colleges" },
     { label: "Compare", href: "/compare" },
     { label: "Saved", href: "/saved" },
-    ...(status === "authenticated" ? [{ label: "My Profile", href: "/saved" }] : [])
+    ...(status === "authenticated"
+      ? [{ label: "My Profile", href: "/saved" }]
+      : [])
   ];
 
   return (
     <header className="sticky top-0 z-40 h-[60px] border-b border-white/5 bg-brand-navy/95 backdrop-blur">
       <nav className="mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        
         {/* Left: Logo */}
-        <Link href="/" className="flex items-center gap-2.5 font-bold text-white text-lg tracking-tight select-none hover:opacity-90 transition-opacity">
+        <Link
+          href="/"
+          className="flex items-center gap-2.5 font-bold text-white text-lg tracking-tight select-none hover:opacity-90 transition-opacity"
+        >
           <Image
             src="/images/logo.png"
             alt="UniVerdict Logo"
@@ -117,14 +130,21 @@ export function Navbar() {
                   </span>
                 )}
               </button>
-              
+
               {dropdownOpen && (
                 <>
-                  <div className="fixed inset-0 z-30" onClick={() => setDropdownOpen(false)} />
+                  <div
+                    className="fixed inset-0 z-30"
+                    onClick={() => setDropdownOpen(false)}
+                  />
                   <div className="absolute right-0 mt-2 w-52 rounded-xl border border-white/5 bg-brand-navyMid p-1.5 shadow-xl z-40">
                     <div className="px-3 py-2 text-xs text-slate-400 border-b border-white/5 mb-1 select-none">
-                      <p className="font-semibold text-white truncate">{session.user.name}</p>
-                      <p className="text-[10px] truncate opacity-70">{session.user.email}</p>
+                      <p className="font-semibold text-white truncate">
+                        {session.user.name}
+                      </p>
+                      <p className="text-[10px] truncate opacity-70">
+                        {session.user.email}
+                      </p>
                     </div>
                     <Link
                       href="/saved"
@@ -167,7 +187,7 @@ export function Navbar() {
           >
             <Search className="h-5 w-5" />
           </button>
-          
+
           <button
             className="rounded-full p-2 text-slate-400 hover:text-white"
             aria-label="Open navigation"
@@ -190,7 +210,13 @@ export function Navbar() {
               {/* Header */}
               <div className="flex items-center justify-between pb-6 border-b border-white/5">
                 <span className="flex items-center gap-2.5 font-semibold text-white">
-                  <Image src="/images/logo.png" alt="UniVerdict Logo" width={28} height={28} className="h-7 w-7 flex-shrink-0" />
+                  <Image
+                    src="/images/logo.png"
+                    alt="UniVerdict Logo"
+                    width={28}
+                    height={28}
+                    className="h-7 w-7 flex-shrink-0"
+                  />
                   <span>
                     Uni<span className="text-brand-gold">Verdict</span>
                   </span>
@@ -220,8 +246,12 @@ export function Navbar() {
                       )}
                     >
                       {link.label === "Saved" && <Heart className="h-4 w-4" />}
-                      {link.label === "Compare" && <Scale className="h-4 w-4" />}
-                      {link.label === "Colleges" && <User className="h-4 w-4" />}
+                      {link.label === "Compare" && (
+                        <Scale className="h-4 w-4" />
+                      )}
+                      {link.label === "Colleges" && (
+                        <User className="h-4 w-4" />
+                      )}
                       {link.label}
                     </Link>
                   );
@@ -249,8 +279,12 @@ export function Navbar() {
                       </span>
                     )}
                     <div className="truncate flex-1">
-                      <p className="text-sm font-semibold text-white truncate">{session.user.name}</p>
-                      <p className="text-xs text-slate-500 truncate">{session.user.email}</p>
+                      <p className="text-sm font-semibold text-white truncate">
+                        {session.user.name}
+                      </p>
+                      <p className="text-xs text-slate-500 truncate">
+                        {session.user.email}
+                      </p>
                     </div>
                   </div>
                   <button

@@ -7,14 +7,20 @@ import { collectionSchema } from "@/lib/validations/saved";
 export async function GET() {
   const session = await auth();
   if (!session?.user?.email) {
-    return NextResponse.json({ data: null, error: { message: "Authentication required" } }, { status: 401 });
+    return NextResponse.json(
+      { data: null, error: { message: "Authentication required" } },
+      { status: 401 }
+    );
   }
 
   const user = await prisma.user.findUnique({
     where: { email: session.user.email }
   });
   if (!user) {
-    return NextResponse.json({ data: null, error: { message: "User not found" } }, { status: 404 });
+    return NextResponse.json(
+      { data: null, error: { message: "User not found" } },
+      { status: 404 }
+    );
   }
 
   const collections = await prisma.collection.findMany({
@@ -32,20 +38,29 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   const session = await auth();
   if (!session?.user?.email) {
-    return NextResponse.json({ data: null, error: { message: "Authentication required" } }, { status: 401 });
+    return NextResponse.json(
+      { data: null, error: { message: "Authentication required" } },
+      { status: 401 }
+    );
   }
 
   const user = await prisma.user.findUnique({
     where: { email: session.user.email }
   });
   if (!user) {
-    return NextResponse.json({ data: null, error: { message: "User not found" } }, { status: 404 });
+    return NextResponse.json(
+      { data: null, error: { message: "User not found" } },
+      { status: 404 }
+    );
   }
 
   const body = await request.json();
   const parsed = collectionSchema.safeParse(body);
   if (!parsed.success) {
-    return NextResponse.json({ data: null, error: { message: "Invalid collection name" } }, { status: 400 });
+    return NextResponse.json(
+      { data: null, error: { message: "Invalid collection name" } },
+      { status: 400 }
+    );
   }
 
   const collection = await prisma.collection.create({

@@ -78,10 +78,15 @@ export function CollegesClient({ colleges, pagination }: CollegesClientProps) {
 
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-8 hidden select-none rounded-[8px] border border-slate-200 bg-white p-6 shadow-sm lg:block">
-          <p className="text-sm font-semibold text-brand-gold">College directory</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-normal text-slate-950">Discover colleges</h1>
+          <p className="text-sm font-semibold text-brand-gold">
+            College directory
+          </p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-normal text-slate-950">
+            Discover colleges
+          </h1>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-            Search by stream, city, fees, ranking, and ratings to build a practical admission shortlist.
+            Search by stream, city, fees, ranking, and ratings to build a
+            practical admission shortlist.
           </p>
         </div>
 
@@ -94,7 +99,11 @@ export function CollegesClient({ colleges, pagination }: CollegesClientProps) {
           <section className="min-w-0 flex-1">
             <div className="mb-6 hidden items-center justify-between rounded-[8px] border border-slate-200 bg-white px-4 py-3 shadow-sm lg:flex">
               <span className="text-sm text-slate-500">
-                Showing <span className="font-semibold text-slate-950">{totalColleges}</span> colleges
+                Showing{" "}
+                <span className="font-semibold text-slate-950">
+                  {totalColleges}
+                </span>{" "}
+                colleges
               </span>
               <div className="flex items-center gap-2 text-xs font-medium">
                 <SlidersHorizontal className="h-4 w-4 text-slate-400" />
@@ -119,9 +128,12 @@ export function CollegesClient({ colleges, pagination }: CollegesClientProps) {
                 <div className="mb-4 rounded-[8px] bg-brand-goldLight p-4 text-brand-navy">
                   <Filter className="h-9 w-9" />
                 </div>
-                <h2 className="text-lg font-semibold text-slate-950">No colleges match your filters</h2>
+                <h2 className="text-lg font-semibold text-slate-950">
+                  No colleges match your filters
+                </h2>
                 <p className="mx-auto mt-1.5 max-w-xs text-sm leading-relaxed text-slate-500">
-                  Try removing a filter or searching with a broader course, city, or college name.
+                  Try removing a filter or searching with a broader course,
+                  city, or college name.
                 </p>
                 <button
                   onClick={clearAllFilters}

@@ -6,22 +6,25 @@ export default function Loading() {
         <div className="h-8 bg-gray-200 rounded-lg w-1/4"></div>
         <div className="h-4 bg-gray-200 rounded-lg w-1/3"></div>
       </div>
-      
+
       <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
         {/* Sidebar skeleton */}
         <div className="hidden lg:block w-[280px] h-[550px] bg-gray-200 rounded-2xl animate-pulse"></div>
-        
+
         <div className="space-y-6">
           {/* Sort bar skeleton */}
           <div className="flex items-center justify-between animate-pulse">
             <div className="h-4 bg-gray-200 rounded-lg w-32"></div>
             <div className="h-10 bg-gray-200 rounded-lg w-48"></div>
           </div>
-          
+
           {/* Cards grid skeleton */}
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="border border-gray-100 rounded-2xl overflow-hidden bg-white p-5 space-y-4 animate-pulse">
+              <div
+                key={i}
+                className="border border-gray-100 rounded-2xl overflow-hidden bg-white p-5 space-y-4 animate-pulse"
+              >
                 <div className="h-[72px] -mx-5 -mt-5 bg-gray-200"></div>
                 <div className="h-4 bg-gray-200 rounded-lg w-2/3"></div>
                 <div className="h-3 bg-gray-200 rounded-lg w-1/3"></div>

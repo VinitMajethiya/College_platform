@@ -1,13 +1,25 @@
 "use client";
 
-import { FolderPlus, Folder, Loader2, Sparkles, Heart, Plus } from "lucide-react";
+import {
+  FolderPlus,
+  Folder,
+  Loader2,
+  Sparkles,
+  Heart,
+  Plus
+} from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useSession, signIn } from "next-auth/react";
 import { toast } from "sonner";
 
 import { CollegeCard } from "@/components/college/CollegeCard";
-import { useSavedColleges, useCollections, useCreateCollection, useAssignCollection } from "@/hooks/useSaved";
+import {
+  useSavedColleges,
+  useCollections,
+  useCreateCollection,
+  useAssignCollection
+} from "@/hooks/useSaved";
 import { College } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -16,13 +28,16 @@ type SavedCollegeItem = College & { collectionId?: string | null };
 export function SavedClient() {
   const { data: session, status } = useSession();
   const { data: savedData, isLoading: savedLoading } = useSavedColleges();
-  const { data: collectionsData, isLoading: collectionsLoading } = useCollections();
-  
+  const { data: collectionsData, isLoading: collectionsLoading } =
+    useCollections();
+
   const createCollection = useCreateCollection();
   const assignCollection = useAssignCollection();
 
   const [newCollectionName, setNewCollectionName] = useState("");
-  const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(null);
+  const [selectedCollectionId, setSelectedCollectionId] = useState<
+    string | null
+  >(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const colleges = (savedData?.data || []) as SavedCollegeItem[];
@@ -38,7 +53,9 @@ export function SavedClient() {
       setNewCollectionName("");
       setIsModalOpen(false);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to create collection");
+      toast.error(
+        err instanceof Error ? err.message : "Failed to create collection"
+      );
     }
   }
 
@@ -47,7 +64,9 @@ export function SavedClient() {
       await assignCollection.mutateAsync({ collectionId, collegeId });
       toast.success("College moved to collection");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to assign college");
+      toast.error(
+        err instanceof Error ? err.message : "Failed to assign college"
+      );
     }
   }
 
@@ -58,9 +77,12 @@ export function SavedClient() {
         <div className="p-5 bg-brand-orange/10 rounded-full text-brand-orange w-16 h-16 flex items-center justify-center mb-6">
           <Heart className="h-8 w-8 text-brand-orange fill-brand-orange animate-pulse" />
         </div>
-        <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 tracking-tight">Sign in to save colleges</h1>
+        <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 tracking-tight">
+          Sign in to save colleges
+        </h1>
         <p className="mt-2 text-sm text-gray-500 max-w-sm mx-auto leading-relaxed font-normal">
-          Create a free account to save colleges, build shortlists, and track your college journey.
+          Create a free account to save colleges, build shortlists, and track
+          your college journey.
         </p>
 
         {/* Google sign-in button */}
@@ -91,7 +113,10 @@ export function SavedClient() {
           </button>
         </div>
 
-        <Link href="/colleges" className="mt-6 text-xs font-semibold text-brand-orange hover:text-brand-orangeHover">
+        <Link
+          href="/colleges"
+          className="mt-6 text-xs font-semibold text-brand-orange hover:text-brand-orangeHover"
+        >
           Continue browsing →
         </Link>
       </main>
@@ -117,7 +142,9 @@ export function SavedClient() {
       {/* Page Header */}
       <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 select-none">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">Saved Shortlists</h1>
+          <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">
+            Saved Shortlists
+          </h1>
           <p className="mt-1.5 text-xs sm:text-sm text-gray-500">
             Organize your target universities and compare backups.
           </p>
@@ -147,9 +174,11 @@ export function SavedClient() {
           >
             All Shortlists ({colleges.length})
           </button>
-          
+
           {collections.map((coll) => {
-            const count = colleges.filter((c) => c.collectionId === coll.id).length;
+            const count = colleges.filter(
+              (c) => c.collectionId === coll.id
+            ).length;
             const isSelected = selectedCollectionId === coll.id;
             return (
               <button
@@ -176,7 +205,9 @@ export function SavedClient() {
       {filteredColleges.length === 0 ? (
         <div className="bg-white border border-gray-100 rounded-2xl p-12 text-center shadow-sm flex flex-col items-center select-none">
           <Sparkles className="h-10 w-10 text-brand-orange mb-4 animate-pulse" />
-          <h2 className="text-lg font-semibold text-gray-900">No saved colleges here</h2>
+          <h2 className="text-lg font-semibold text-gray-900">
+            No saved colleges here
+          </h2>
           <p className="mt-1.5 text-sm text-gray-500 max-w-xs mx-auto leading-relaxed">
             {selectedCollectionId
               ? "Assign some of your saved colleges to this collection."
@@ -198,11 +229,13 @@ export function SavedClient() {
               <div className="flex-1">
                 <CollegeCard college={college} />
               </div>
-              
+
               {/* Collection Assign Selector Dropdown */}
               {collections.length > 0 && (
                 <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-2.5 text-xs flex items-center justify-between gap-2 shadow-xs select-none">
-                  <span className="font-semibold text-gray-400">Move to collection:</span>
+                  <span className="font-semibold text-gray-400">
+                    Move to collection:
+                  </span>
                   <select
                     value={college.collectionId || ""}
                     aria-label={`Assign ${college.name} to a collection`}
@@ -225,12 +258,17 @@ export function SavedClient() {
 
       {/* 3. NEW COLLECTION DIALOG MODAL */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center" onClick={() => setIsModalOpen(false)}>
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center"
+          onClick={() => setIsModalOpen(false)}
+        >
           <div
             className="bg-white rounded-2xl p-6 w-full max-w-sm mx-4 shadow-2xl border border-gray-100 space-y-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="font-semibold text-gray-900 text-base">New Collection</h3>
+            <h3 className="font-semibold text-gray-900 text-base">
+              New Collection
+            </h3>
             <input
               type="text"
               placeholder="e.g. Dream Colleges, Safety Options"

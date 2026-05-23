@@ -9,7 +9,11 @@ import { CollegeDetailTabs } from "@/components/college/CollegeDetailTabs";
 import { getCollegeBySlug, getRelatedColleges } from "@/lib/college-service";
 import { formatFeeRange } from "@/lib/utils";
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({
+  params
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
   const college = await getCollegeBySlug(params.slug);
   if (!college) return {};
 
@@ -23,12 +27,18 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function CollegeDetailPage({ params }: { params: { slug: string } }) {
+export default async function CollegeDetailPage({
+  params
+}: {
+  params: { slug: string };
+}) {
   const college = await getCollegeBySlug(params.slug);
   if (!college) notFound();
 
   const related = await getRelatedColleges(college.slug);
-  const courseTypes = college.courses.map((course) => course.type.toLowerCase());
+  const courseTypes = college.courses.map((course) =>
+    course.type.toLowerCase()
+  );
   let stream = "default";
   if (courseTypes.includes("engineering")) stream = "engineering";
   else if (courseTypes.includes("medical")) stream = "medical";
@@ -39,17 +49,29 @@ export default async function CollegeDetailPage({ params }: { params: { slug: st
     <main className="min-h-screen bg-[#f7f9fc]">
       <div className="border-b border-slate-200 bg-white py-3.5">
         <nav className="mx-auto flex max-w-7xl items-center gap-1.5 px-4 text-xs font-medium text-slate-400 sm:px-6 lg:px-8">
-          <Link href="/" className="transition-colors hover:text-brand-gold">Home</Link>
+          <Link href="/" className="transition-colors hover:text-brand-gold">
+            Home
+          </Link>
           <ChevronRight className="h-3 w-3" />
-          <Link href="/colleges" className="transition-colors hover:text-brand-gold">Colleges</Link>
+          <Link
+            href="/colleges"
+            className="transition-colors hover:text-brand-gold"
+          >
+            Colleges
+          </Link>
           <ChevronRight className="h-3 w-3" />
-          <span className="max-w-xs truncate font-normal text-slate-700">{college.name}</span>
+          <span className="max-w-xs truncate font-normal text-slate-700">
+            {college.name}
+          </span>
         </nav>
       </div>
 
       <section className="relative overflow-hidden py-16 text-white">
         <Image
-          src={college.imageUrl || `/images/colleges/${["engineering", "medical", "management", "law"].includes(stream) ? stream : "default"}.png`}
+          src={
+            college.imageUrl ||
+            `/images/colleges/${["engineering", "medical", "management", "law"].includes(stream) ? stream : "default"}.png`
+          }
           alt={college.name}
           fill
           priority
@@ -65,7 +87,9 @@ export default async function CollegeDetailPage({ params }: { params: { slug: st
             </h1>
             <p className="mt-4 flex items-center gap-1.5 text-sm text-white/82">
               <MapPin className="h-4 w-4 flex-shrink-0 text-white/70" />
-              <span>{college.city}, {college.state}</span>
+              <span>
+                {college.city}, {college.state}
+              </span>
             </p>
 
             <div className="mt-5 flex flex-wrap gap-2">
@@ -81,7 +105,8 @@ export default async function CollegeDetailPage({ params }: { params: { slug: st
                 Est. {college.established}
               </span>
               <span className="rounded-full border border-white/18 bg-white/10 px-3 py-1 text-xs font-semibold text-white">
-                {formatFeeRange(college.annualFeesMin, college.annualFeesMax)}/yr
+                {formatFeeRange(college.annualFeesMin, college.annualFeesMax)}
+                /yr
               </span>
             </div>
           </div>
@@ -93,10 +118,15 @@ export default async function CollegeDetailPage({ params }: { params: { slug: st
 
         <section className="mt-16 border-t border-slate-200 pt-12">
           <div className="mb-8">
-            <p className="text-sm font-semibold text-brand-gold">More to compare</p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-normal text-slate-950">Related colleges</h2>
+            <p className="text-sm font-semibold text-brand-gold">
+              More to compare
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-normal text-slate-950">
+              Related colleges
+            </h2>
             <p className="mt-2 text-sm leading-6 text-slate-600">
-              Similar institutions located near {college.state} or matching streams.
+              Similar institutions located near {college.state} or matching
+              streams.
             </p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

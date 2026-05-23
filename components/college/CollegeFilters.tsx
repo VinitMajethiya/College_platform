@@ -44,7 +44,10 @@ interface CollegeFiltersProps {
   onMobileClose?: () => void;
 }
 
-export function CollegeFilters({ mobileOpen = false, onMobileClose }: CollegeFiltersProps) {
+export function CollegeFilters({
+  mobileOpen = false,
+  onMobileClose
+}: CollegeFiltersProps) {
   const params = useSearchParams();
   const router = useRouter();
   const [, startTransition] = useTransition();
@@ -82,8 +85,12 @@ export function CollegeFilters({ mobileOpen = false, onMobileClose }: CollegeFil
     onMobileClose?.();
   }
 
-  const activeStreamsCount = (params.get("course") ?? "").split(",").filter(Boolean).length;
-  const activeLocationsCount = (params.get("state") ?? "").split(",").filter(Boolean).length;
+  const activeStreamsCount = (params.get("course") ?? "")
+    .split(",")
+    .filter(Boolean).length;
+  const activeLocationsCount = (params.get("state") ?? "")
+    .split(",")
+    .filter(Boolean).length;
   const currentMaxFees = Number(params.get("maxFees") ?? "2500000");
   const currentMinRating = Number(params.get("minRating") ?? "0");
   const currentMaxRank = params.get("maxRank");
@@ -91,7 +98,9 @@ export function CollegeFilters({ mobileOpen = false, onMobileClose }: CollegeFil
 
   const renderSectionLabel = (label: string, count?: number) => (
     <div className="mb-2 flex items-center justify-between">
-      <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400">{label}</label>
+      <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400">
+        {label}
+      </label>
       {!!count && (
         <span className="rounded-full bg-brand-goldLight px-2 py-0.5 text-[10px] font-bold text-brand-navy">
           {count} selected
@@ -121,20 +130,32 @@ export function CollegeFilters({ mobileOpen = false, onMobileClose }: CollegeFil
       <div>
         {renderSectionLabel("Stream", activeStreamsCount)}
         <div className="mt-1 max-h-[160px] space-y-2 overflow-y-auto pr-1">
-          {coursesList.slice(0, showAllStreams ? coursesList.length : 5).map((course) => {
-            const isChecked = (params.get("course") ?? "").split(",").includes(course.value);
-            return (
-              <label key={course.value} className="flex cursor-pointer items-center gap-2.5 text-sm font-medium text-slate-600 hover:text-slate-950">
-                <input
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={() => updateFilter("course", toggleCsv(params.get("course"), course.value))}
-                  className="h-4 w-4 rounded border-slate-300 text-brand-gold focus:ring-brand-gold"
-                />
-                <span>{course.label}</span>
-              </label>
-            );
-          })}
+          {coursesList
+            .slice(0, showAllStreams ? coursesList.length : 5)
+            .map((course) => {
+              const isChecked = (params.get("course") ?? "")
+                .split(",")
+                .includes(course.value);
+              return (
+                <label
+                  key={course.value}
+                  className="flex cursor-pointer items-center gap-2.5 text-sm font-medium text-slate-600 hover:text-slate-950"
+                >
+                  <input
+                    type="checkbox"
+                    checked={isChecked}
+                    onChange={() =>
+                      updateFilter(
+                        "course",
+                        toggleCsv(params.get("course"), course.value)
+                      )
+                    }
+                    className="h-4 w-4 rounded border-slate-300 text-brand-gold focus:ring-brand-gold"
+                  />
+                  <span>{course.label}</span>
+                </label>
+              );
+            })}
         </div>
         <button
           onClick={() => setShowAllStreams(!showAllStreams)}
@@ -149,20 +170,32 @@ export function CollegeFilters({ mobileOpen = false, onMobileClose }: CollegeFil
       <div>
         {renderSectionLabel("Location", activeLocationsCount)}
         <div className="mt-1 max-h-[160px] space-y-2 overflow-y-auto pr-1">
-          {statesList.slice(0, showAllLocations ? statesList.length : 5).map((state) => {
-            const isChecked = (params.get("state") ?? "").split(",").includes(state);
-            return (
-              <label key={state} className="flex cursor-pointer items-center gap-2.5 text-sm font-medium text-slate-600 hover:text-slate-950">
-                <input
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={() => updateFilter("state", toggleCsv(params.get("state"), state))}
-                  className="h-4 w-4 rounded border-slate-300 text-brand-gold focus:ring-brand-gold"
-                />
-                <span>{state}</span>
-              </label>
-            );
-          })}
+          {statesList
+            .slice(0, showAllLocations ? statesList.length : 5)
+            .map((state) => {
+              const isChecked = (params.get("state") ?? "")
+                .split(",")
+                .includes(state);
+              return (
+                <label
+                  key={state}
+                  className="flex cursor-pointer items-center gap-2.5 text-sm font-medium text-slate-600 hover:text-slate-950"
+                >
+                  <input
+                    type="checkbox"
+                    checked={isChecked}
+                    onChange={() =>
+                      updateFilter(
+                        "state",
+                        toggleCsv(params.get("state"), state)
+                      )
+                    }
+                    className="h-4 w-4 rounded border-slate-300 text-brand-gold focus:ring-brand-gold"
+                  />
+                  <span>{state}</span>
+                </label>
+              );
+            })}
         </div>
         <button
           onClick={() => setShowAllLocations(!showAllLocations)}
@@ -205,7 +238,9 @@ export function CollegeFilters({ mobileOpen = false, onMobileClose }: CollegeFil
             { label: "Top 50", value: "50" },
             { label: "Top 100", value: "100" }
           ].map((item) => {
-            const isSelected = (currentMaxRank === null && item.value === "") || currentMaxRank === item.value;
+            const isSelected =
+              (currentMaxRank === null && item.value === "") ||
+              currentMaxRank === item.value;
             return (
               <button
                 key={item.label}
@@ -234,20 +269,31 @@ export function CollegeFilters({ mobileOpen = false, onMobileClose }: CollegeFil
             return (
               <button
                 key={star}
-                onClick={() => updateFilter("minRating", currentMinRating === star ? "" : String(star))}
+                onClick={() =>
+                  updateFilter(
+                    "minRating",
+                    currentMinRating === star ? "" : String(star)
+                  )
+                }
                 className="transition-transform hover:scale-110 active:scale-95"
                 aria-label={`${star} stars and above`}
               >
                 <Star
                   className={cn(
                     "h-6 w-6 transition-colors",
-                    isSelected ? "fill-amber-400 text-amber-400" : "text-slate-200"
+                    isSelected
+                      ? "fill-amber-400 text-amber-400"
+                      : "text-slate-200"
                   )}
                 />
               </button>
             );
           })}
-          {currentMinRating > 0 && <span className="ml-2 text-xs font-bold text-slate-500">({currentMinRating}+)</span>}
+          {currentMinRating > 0 && (
+            <span className="ml-2 text-xs font-bold text-slate-500">
+              ({currentMinRating}+)
+            </span>
+          )}
         </div>
       </div>
 
@@ -263,7 +309,10 @@ export function CollegeFilters({ mobileOpen = false, onMobileClose }: CollegeFil
             { label: "Fees: High to Low", value: "fees-desc" },
             { label: "Name A-Z", value: "name" }
           ].map((item) => (
-            <label key={item.value} className="flex cursor-pointer items-center gap-2.5 text-sm font-medium text-slate-600 hover:text-slate-950">
+            <label
+              key={item.value}
+              className="flex cursor-pointer items-center gap-2.5 text-sm font-medium text-slate-600 hover:text-slate-950"
+            >
               <input
                 type="radio"
                 name="sidebar-sort"
@@ -299,11 +348,17 @@ export function CollegeFilters({ mobileOpen = false, onMobileClose }: CollegeFil
 
       {mobileOpen && (
         <div className="fixed inset-0 z-50 flex flex-col justify-end lg:hidden animate-in fade-in duration-200">
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-xs" onClick={onMobileClose} />
+          <div
+            className="fixed inset-0 bg-black/60 backdrop-blur-xs"
+            onClick={onMobileClose}
+          />
           <div className="relative z-10 flex max-h-[85vh] w-full flex-col overflow-y-auto rounded-t-[16px] bg-white p-6 animate-in slide-in-from-bottom duration-300">
             <div className="mb-4 flex items-center justify-between border-b border-slate-100 pb-4">
               <h3 className="text-lg font-semibold text-slate-950">Filters</h3>
-              <button onClick={onMobileClose} className="rounded-full p-1 transition hover:bg-slate-100">
+              <button
+                onClick={onMobileClose}
+                className="rounded-full p-1 transition hover:bg-slate-100"
+              >
                 <X className="h-5 w-5 text-slate-500" />
               </button>
             </div>

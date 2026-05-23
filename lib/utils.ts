@@ -18,7 +18,9 @@ export function formatCurrencyINR(value: number) {
 }
 
 export function formatFeeRange(min: number, max: number) {
-  return min === max ? formatCurrencyINR(min) : `${formatCurrencyINR(min)} - ${formatCurrencyINR(max)}`;
+  return min === max
+    ? formatCurrencyINR(min)
+    : `${formatCurrencyINR(min)} - ${formatCurrencyINR(max)}`;
 }
 
 export function slugify(value: string) {

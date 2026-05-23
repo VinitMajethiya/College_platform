@@ -1,7 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { CourseType, College } from "@/lib/types";
 import { CollegeListQuery } from "@/lib/validations/college";
-import { colleges as sampleColleges, getCollegeBySlug as getSampleCollegeBySlug } from "@/lib/sample-data";
+import {
+  colleges as sampleColleges,
+  getCollegeBySlug as getSampleCollegeBySlug
+} from "@/lib/sample-data";
 
 export function mapCollege(college: any): College {
   return {
@@ -43,7 +46,10 @@ export function mapCollege(college: any): College {
       rating: review.rating,
       title: review.title,
       body: review.body,
-      createdAt: review.createdAt instanceof Date ? review.createdAt.toISOString().split("T")[0] : String(review.createdAt)
+      createdAt:
+        review.createdAt instanceof Date
+          ? review.createdAt.toISOString().split("T")[0]
+          : String(review.createdAt)
     }))
   };
 }
@@ -84,13 +90,33 @@ async function listDbColleges(query: CollegeListQuery) {
       // Support acronym expansions
       const lowerSearch = search.toLowerCase();
       if (lowerSearch === "iit") {
-        searchCondition.push({ name: { startsWith: "Indian Institute of Technology", mode: "insensitive" } });
+        searchCondition.push({
+          name: {
+            startsWith: "Indian Institute of Technology",
+            mode: "insensitive"
+          }
+        });
       } else if (lowerSearch === "nit") {
-        searchCondition.push({ name: { startsWith: "National Institute of Technology", mode: "insensitive" } });
+        searchCondition.push({
+          name: {
+            startsWith: "National Institute of Technology",
+            mode: "insensitive"
+          }
+        });
       } else if (lowerSearch === "iim") {
-        searchCondition.push({ name: { startsWith: "Indian Institute of Management", mode: "insensitive" } });
+        searchCondition.push({
+          name: {
+            startsWith: "Indian Institute of Management",
+            mode: "insensitive"
+          }
+        });
       } else if (lowerSearch === "aiims") {
-        searchCondition.push({ name: { startsWith: "All India Institute of Medical Sciences", mode: "insensitive" } });
+        searchCondition.push({
+          name: {
+            startsWith: "All India Institute of Medical Sciences",
+            mode: "insensitive"
+          }
+        });
       }
 
       where.OR = searchCondition;
@@ -185,19 +211,24 @@ export async function getRelatedColleges(slug: string) {
     const sampleCollege = getSampleCollegeBySlug(slug);
     if (!sampleCollege) return [];
 
-    const courseTypes = Array.from(new Set(sampleCollege.courses.map((course) => course.type)));
+    const courseTypes = Array.from(
+      new Set(sampleCollege.courses.map((course) => course.type))
+    );
     return sampleColleges
       .filter(
         (item) =>
           item.slug !== slug &&
-          (item.state === sampleCollege.state || item.courses.some((course) => courseTypes.includes(course.type)))
+          (item.state === sampleCollege.state ||
+            item.courses.some((course) => courseTypes.includes(course.type)))
       )
       .slice(0, 3);
   }
 
   if (!college) return [];
 
-  const courseTypes = Array.from(new Set(college.courses.map((course) => course.type)));
+  const courseTypes = Array.from(
+    new Set(college.courses.map((course) => course.type))
+  );
 
   const related = await prisma.college.findMany({
     where: {
@@ -273,9 +304,18 @@ function listSampleColleges(query: CollegeListQuery) {
         .toLowerCase();
 
       const acronymMatch =
-        (search === "iit" && college.name.toLowerCase().startsWith("indian institute of technology")) ||
-        (search === "nit" && college.name.toLowerCase().startsWith("national institute of technology")) ||
-        (search === "iim" && college.name.toLowerCase().startsWith("indian institute of management")) ||
+        (search === "iit" &&
+          college.name
+            .toLowerCase()
+            .startsWith("indian institute of technology")) ||
+        (search === "nit" &&
+          college.name
+            .toLowerCase()
+            .startsWith("national institute of technology")) ||
+        (search === "iim" &&
+          college.name
+            .toLowerCase()
+            .startsWith("indian institute of management")) ||
         (search === "aiims" && college.name.toLowerCase().includes("aiims"));
 
       if (!haystack.includes(search) && !acronymMatch) return false;
@@ -283,22 +323,38 @@ function listSampleColleges(query: CollegeListQuery) {
 
     if (states.length > 0 && !states.includes(college.state)) return false;
 
-    if (courses.length > 0 && !college.courses.some((course) => courses.includes(course.type))) {
+    if (
+      courses.length > 0 &&
+      !college.courses.some((course) => courses.includes(course.type))
+    ) {
       return false;
     }
 
-    if (query.minFees !== undefined && college.annualFeesMax < query.minFees) return false;
-    if (query.maxFees !== undefined && college.annualFeesMin > query.maxFees) return false;
-    if (query.minRating !== undefined && college.rating < query.minRating) return false;
-    if (query.minRank !== undefined && (!college.nirfRanking || college.nirfRanking < query.minRank)) return false;
-    if (query.maxRank !== undefined && (!college.nirfRanking || college.nirfRanking > query.maxRank)) return false;
+    if (query.minFees !== undefined && college.annualFeesMax < query.minFees)
+      return false;
+    if (query.maxFees !== undefined && college.annualFeesMin > query.maxFees)
+      return false;
+    if (query.minRating !== undefined && college.rating < query.minRating)
+      return false;
+    if (
+      query.minRank !== undefined &&
+      (!college.nirfRanking || college.nirfRanking < query.minRank)
+    )
+      return false;
+    if (
+      query.maxRank !== undefined &&
+      (!college.nirfRanking || college.nirfRanking > query.maxRank)
+    )
+      return false;
 
     return true;
   });
 
   filtered = [...filtered].sort((first, second) => {
-    if (query.sort === "fees-asc") return first.annualFeesMin - second.annualFeesMin;
-    if (query.sort === "fees-desc") return second.annualFeesMax - first.annualFeesMax;
+    if (query.sort === "fees-asc")
+      return first.annualFeesMin - second.annualFeesMin;
+    if (query.sort === "fees-desc")
+      return second.annualFeesMax - first.annualFeesMax;
     if (query.sort === "rating") return second.rating - first.rating;
     if (query.sort === "name") return first.name.localeCompare(second.name);
     return (first.nirfRanking ?? 9999) - (second.nirfRanking ?? 9999);

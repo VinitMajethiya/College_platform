@@ -1,7 +1,21 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { BookOpen, GraduationCap, Award, Star, Search, Calendar, MapPin, Globe, Phone, Mail, Award as PlacementIcon, Scale, ShieldCheck } from "lucide-react";
+import {
+  BookOpen,
+  GraduationCap,
+  Award,
+  Star,
+  Search,
+  Calendar,
+  MapPin,
+  Globe,
+  Phone,
+  Mail,
+  Award as PlacementIcon,
+  Scale,
+  ShieldCheck
+} from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -53,8 +67,11 @@ export function CollegeDetailTabs({ college }: CollegeDetailTabsProps) {
     return college.courses.filter((course) => {
       const matchesSearch =
         course.name.toLowerCase().includes(courseSearch.toLowerCase()) ||
-        (course.eligibility || "").toLowerCase().includes(courseSearch.toLowerCase());
-      const matchesType = selectedCourseType === "All" || course.type === selectedCourseType;
+        (course.eligibility || "")
+          .toLowerCase()
+          .includes(courseSearch.toLowerCase());
+      const matchesType =
+        selectedCourseType === "All" || course.type === selectedCourseType;
       return matchesSearch && matchesType;
     });
   }, [college.courses, courseSearch, selectedCourseType]);
@@ -65,7 +82,12 @@ export function CollegeDetailTabs({ college }: CollegeDetailTabsProps) {
     let total = 0;
 
     college.reviews.forEach((r) => {
-      const rating = Math.min(5, Math.max(1, Math.round(r.rating))) as 1 | 2 | 3 | 4 | 5;
+      const rating = Math.min(5, Math.max(1, Math.round(r.rating))) as
+        | 1
+        | 2
+        | 3
+        | 4
+        | 5;
       counts[rating]++;
       total++;
     });
@@ -79,7 +101,11 @@ export function CollegeDetailTabs({ college }: CollegeDetailTabsProps) {
         else if (star === 3) pct = 10;
         else if (star === 2) pct = 4;
         else pct = 1;
-        return { rating: star, percent: pct, count: Math.round(college.reviewCount * (pct / 100)) };
+        return {
+          rating: star,
+          percent: pct,
+          count: Math.round(college.reviewCount * (pct / 100))
+        };
       });
     }
 
@@ -122,10 +148,8 @@ export function CollegeDetailTabs({ college }: CollegeDetailTabsProps) {
 
   return (
     <div className="space-y-6">
-      
       {/* 1. Sticky Actions Bar */}
       <div className="bg-white border border-gray-100 rounded-2xl px-6 py-3 flex items-center justify-between sticky top-[60px] z-20 shadow-sm">
-        
         {/* Left: Tab Switches */}
         <div className="flex items-center gap-6 overflow-x-auto no-scrollbar">
           {tabs.map((tab) => {
@@ -150,7 +174,7 @@ export function CollegeDetailTabs({ college }: CollegeDetailTabsProps) {
         {/* Right: Actions */}
         <div className="flex items-center gap-2 flex-shrink-0">
           <SaveButton collegeId={college.id} />
-          
+
           <button
             onClick={handleCompareToggle}
             className={cn(
@@ -161,14 +185,15 @@ export function CollegeDetailTabs({ college }: CollegeDetailTabsProps) {
             )}
           >
             <Scale className="h-4 w-4" />
-            <span className="hidden sm:inline">{isCompared ? "Compared" : "Compare"}</span>
+            <span className="hidden sm:inline">
+              {isCompared ? "Compared" : "Compare"}
+            </span>
           </button>
         </div>
       </div>
 
       {/* 2. Tab Panels */}
       <div className="mt-6">
-        
         {/* OVERVIEW PANEL */}
         {activeTab === "overview" && (
           <div className="grid gap-6 lg:grid-cols-[1fr_280px]">
@@ -219,7 +244,9 @@ export function CollegeDetailTabs({ college }: CollegeDetailTabsProps) {
                       <Calendar className="h-3.5 w-3.5 text-gray-400" />
                       Established
                     </dt>
-                    <dd className="mt-0.5 text-sm font-bold text-gray-800 ml-5">{college.established}</dd>
+                    <dd className="mt-0.5 text-sm font-bold text-gray-800 ml-5">
+                      {college.established}
+                    </dd>
                   </div>
 
                   <div>
@@ -228,7 +255,9 @@ export function CollegeDetailTabs({ college }: CollegeDetailTabsProps) {
                       Campus Size
                     </dt>
                     <dd className="mt-0.5 text-sm font-bold text-gray-800 ml-5">
-                      {college.campusAreaAcres ? `${college.campusAreaAcres} Acres` : "N/A"}
+                      {college.campusAreaAcres
+                        ? `${college.campusAreaAcres} Acres`
+                        : "N/A"}
                     </dd>
                   </div>
                 </dl>
@@ -341,20 +370,27 @@ export function CollegeDetailTabs({ college }: CollegeDetailTabsProps) {
                           idx % 2 === 1 ? "bg-gray-50/20" : "bg-white"
                         )}
                       >
-                        <td className="py-3.5 px-4 font-medium text-gray-900">{course.name}</td>
+                        <td className="py-3.5 px-4 font-medium text-gray-900">
+                          {course.name}
+                        </td>
                         <td className="py-3.5 px-4">
                           <span className="inline-flex rounded-full bg-blue-50 text-blue-700 text-[10px] font-semibold px-2.5 py-0.5 border border-blue-100/50">
                             {course.type}
                           </span>
                         </td>
-                        <td className="py-3.5 px-4 text-gray-500">{course.duration} Years</td>
+                        <td className="py-3.5 px-4 text-gray-500">
+                          {course.duration} Years
+                        </td>
                         <td className="py-3.5 px-4 text-right font-bold text-gray-900">
                           {formatCurrencyINR(course.annualFees)}
                         </td>
                         <td className="py-3.5 px-4 text-right text-gray-700 font-medium">
                           {course.seats || "N/A"}
                         </td>
-                        <td className="py-3.5 px-4 pl-6 text-xs text-gray-500 max-w-[200px] truncate" title={course.eligibility}>
+                        <td
+                          className="py-3.5 px-4 pl-6 text-xs text-gray-500 max-w-[200px] truncate"
+                          title={course.eligibility}
+                        >
                           {course.eligibility || "10+2 passing required"}
                         </td>
                       </tr>
@@ -372,23 +408,35 @@ export function CollegeDetailTabs({ college }: CollegeDetailTabsProps) {
             {/* Top Stat Cards */}
             <div className="grid gap-6 sm:grid-cols-3">
               <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm text-center">
-                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Average Package</p>
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  Average Package
+                </p>
                 <p className="mt-2 text-2xl sm:text-3xl font-bold text-blue-600">
-                  {college.avgPackageLPA ? `₹${college.avgPackageLPA} LPA` : "N/A"}
+                  {college.avgPackageLPA
+                    ? `₹${college.avgPackageLPA} LPA`
+                    : "N/A"}
                 </p>
               </div>
 
               <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm text-center">
-                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Highest Package</p>
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  Highest Package
+                </p>
                 <p className="mt-2 text-2xl sm:text-3xl font-bold text-emerald-600">
-                  {college.highestPackageLPA ? `₹${college.highestPackageLPA} LPA` : "N/A"}
+                  {college.highestPackageLPA
+                    ? `₹${college.highestPackageLPA} LPA`
+                    : "N/A"}
                 </p>
               </div>
 
               <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm text-center">
-                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Placement Rate</p>
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  Placement Rate
+                </p>
                 <p className="mt-2 text-2xl sm:text-3xl font-bold text-brand-orange">
-                  {college.placementPercent ? `${college.placementPercent}%` : "N/A"}
+                  {college.placementPercent
+                    ? `${college.placementPercent}%`
+                    : "N/A"}
                 </p>
               </div>
             </div>
@@ -408,7 +456,10 @@ export function CollegeDetailTabs({ college }: CollegeDetailTabsProps) {
                     <span className="w-10 h-10 flex items-center justify-center rounded-full bg-brand-orange/10 text-brand-orange font-bold text-sm mb-2 select-none">
                       {recruiter.charAt(0)}
                     </span>
-                    <span className="text-xs font-semibold text-gray-700 truncate w-full" title={recruiter}>
+                    <span
+                      className="text-xs font-semibold text-gray-700 truncate w-full"
+                      title={recruiter}
+                    >
                       {recruiter}
                     </span>
                   </div>
@@ -432,21 +483,30 @@ export function CollegeDetailTabs({ college }: CollegeDetailTabsProps) {
                   <span>{college.rating.toFixed(1)}</span>
                   <Star className="h-8 w-8 fill-amber-400 text-amber-400" />
                 </div>
-                <p className="mt-1 text-xs font-semibold text-gray-400">Based on {college.reviewCount} reviews</p>
+                <p className="mt-1 text-xs font-semibold text-gray-400">
+                  Based on {college.reviewCount} reviews
+                </p>
               </div>
 
               {/* Progress bars */}
               <div className="mt-6 space-y-2">
                 {reviewBreakdown.map((row) => (
-                  <div key={row.rating} className="grid grid-cols-[30px_1fr_35px] items-center gap-2 text-xs">
-                    <span className="font-semibold text-gray-500">{row.rating}★</span>
+                  <div
+                    key={row.rating}
+                    className="grid grid-cols-[30px_1fr_35px] items-center gap-2 text-xs"
+                  >
+                    <span className="font-semibold text-gray-500">
+                      {row.rating}★
+                    </span>
                     <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
                       <div
                         className="h-full rounded-full bg-brand-orange transition-all duration-300"
                         style={{ width: `${row.percent}%` }}
                       />
                     </div>
-                    <span className="text-right text-gray-400 font-semibold">{row.percent}%</span>
+                    <span className="text-right text-gray-400 font-semibold">
+                      {row.percent}%
+                    </span>
                   </div>
                 ))}
               </div>
@@ -454,7 +514,6 @@ export function CollegeDetailTabs({ college }: CollegeDetailTabsProps) {
 
             {/* Reviews List & Write Review Form */}
             <div className="space-y-6">
-              
               {/* Reviews List */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">
@@ -463,7 +522,8 @@ export function CollegeDetailTabs({ college }: CollegeDetailTabsProps) {
 
                 {college.reviews.length === 0 ? (
                   <div className="bg-white border border-gray-100 rounded-2xl p-8 text-center text-sm text-gray-500">
-                    No reviews submitted yet. Be the first to share your honest thoughts!
+                    No reviews submitted yet. Be the first to share your honest
+                    thoughts!
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -478,8 +538,12 @@ export function CollegeDetailTabs({ college }: CollegeDetailTabsProps) {
                               {review.reviewerName.charAt(0).toUpperCase()}
                             </span>
                             <div>
-                              <p className="text-sm font-semibold text-gray-950">{review.reviewerName}</p>
-                              <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">Verified Senior</p>
+                              <p className="text-sm font-semibold text-gray-950">
+                                {review.reviewerName}
+                              </p>
+                              <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">
+                                Verified Senior
+                              </p>
                             </div>
                           </div>
 
@@ -490,18 +554,26 @@ export function CollegeDetailTabs({ college }: CollegeDetailTabsProps) {
                                   key={i}
                                   className={cn(
                                     "h-3.5 w-3.5",
-                                    i < review.rating ? "fill-amber-400 text-amber-400" : "text-gray-200"
+                                    i < review.rating
+                                      ? "fill-amber-400 text-amber-400"
+                                      : "text-gray-200"
                                   )}
                                 />
                               ))}
                             </span>
-                            <span className="text-xs font-semibold text-gray-400 ml-1">{review.createdAt}</span>
+                            <span className="text-xs font-semibold text-gray-400 ml-1">
+                              {review.createdAt}
+                            </span>
                           </div>
                         </div>
 
                         <div>
-                          <h4 className="text-sm font-semibold text-gray-900 leading-snug">{review.title}</h4>
-                          <p className="mt-1 text-xs sm:text-sm text-gray-600 leading-relaxed font-normal">{review.body}</p>
+                          <h4 className="text-sm font-semibold text-gray-900 leading-snug">
+                            {review.title}
+                          </h4>
+                          <p className="mt-1 text-xs sm:text-sm text-gray-600 leading-relaxed font-normal">
+                            {review.body}
+                          </p>
                         </div>
                       </article>
                     ))}
@@ -517,7 +589,6 @@ export function CollegeDetailTabs({ college }: CollegeDetailTabsProps) {
 
                 {session ? (
                   <form onSubmit={handleReviewSubmit} className="space-y-4">
-                    
                     {/* Star Rating Select */}
                     <div>
                       <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-2 select-none">
@@ -536,7 +607,9 @@ export function CollegeDetailTabs({ college }: CollegeDetailTabsProps) {
                               <Star
                                 className={cn(
                                   "h-6 w-6 transition-colors duration-150",
-                                  isSelected ? "fill-amber-400 text-amber-400" : "text-gray-200"
+                                  isSelected
+                                    ? "fill-amber-400 text-amber-400"
+                                    : "text-gray-200"
                                 )}
                               />
                             </button>
@@ -547,7 +620,10 @@ export function CollegeDetailTabs({ college }: CollegeDetailTabsProps) {
 
                     {/* Review Title */}
                     <div>
-                      <label htmlFor="review-title" className="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-2 select-none">
+                      <label
+                        htmlFor="review-title"
+                        className="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-2 select-none"
+                      >
                         Review Title
                       </label>
                       <input
@@ -562,7 +638,10 @@ export function CollegeDetailTabs({ college }: CollegeDetailTabsProps) {
 
                     {/* Review Body */}
                     <div>
-                      <label htmlFor="review-body" className="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-2 select-none">
+                      <label
+                        htmlFor="review-body"
+                        className="text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-2 select-none"
+                      >
                         Review Details
                       </label>
                       <textarea
@@ -586,7 +665,10 @@ export function CollegeDetailTabs({ college }: CollegeDetailTabsProps) {
                   <div className="py-4 text-center">
                     <p className="text-xs sm:text-sm text-gray-500">
                       Please{" "}
-                      <Link href="/auth/signin" className="text-brand-orange font-semibold hover:underline">
+                      <Link
+                        href="/auth/signin"
+                        className="text-brand-orange font-semibold hover:underline"
+                      >
                         Sign In
                       </Link>{" "}
                       to share your student experience.
