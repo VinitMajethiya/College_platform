@@ -2,6 +2,7 @@
 
 import { Share2, X, Loader2, Search, Plus, Sparkles, Scale, GraduationCap, MapPin, Award, Check } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -184,11 +185,18 @@ export function CompareClient() {
                   <th key={college.id} className="p-4 align-top w-64 border-l border-gray-100">
                     <div className="space-y-3">
                       {/* Mini Banner */}
-                      <div className={cn("relative h-[60px] flex items-center px-4 overflow-hidden rounded-xl bg-gradient-to-r select-none", getStreamGradient(stream))}>
-                        <span className="text-sm font-semibold text-white truncate pr-6">{college.name}</span>
+                      <div className="relative h-[60px] flex items-center px-4 overflow-hidden rounded-xl bg-brand-navy select-none">
+                        <Image
+                          src={college.imageUrl || `/images/colleges/${["engineering", "medical", "management", "law"].includes(stream) ? stream : "default"}.png`}
+                          alt={college.name}
+                          fill
+                          className="object-cover opacity-35"
+                          unoptimized
+                        />
+                        <span className="relative z-10 text-sm font-semibold text-white truncate pr-6">{college.name}</span>
                         <button
                           onClick={() => handleRemove(college.id)}
-                          className="absolute top-2 right-2 p-1 text-white/70 hover:text-white rounded-full hover:bg-white/10 transition-colors"
+                          className="relative z-10 p-1 text-white/70 hover:text-white rounded-full hover:bg-white/10 transition-colors ml-auto"
                           aria-label={`Remove ${college.name}`}
                         >
                           <X className="h-4 w-4" />

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { MapPin, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import { CollegeCard } from "@/components/college/CollegeCard";
@@ -58,9 +59,21 @@ export default async function CollegeDetailPage({ params }: { params: { slug: st
       </div>
 
       {/* 2. Hero Section */}
-      <section className={`relative bg-gradient-to-r ${gradient} text-white py-12 overflow-hidden`}>
-        {/* Subtle grid pattern overlay */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+      <section className="relative text-white py-16 overflow-hidden">
+        {/* Campus Image Background */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src={college.imageUrl || `/images/colleges/${["engineering", "medical", "management", "law"].includes(stream) ? stream : "default"}.png`}
+            alt={college.name}
+            fill
+            priority
+            className="object-cover"
+            unoptimized
+          />
+          {/* Rich glassmorphic gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/95 via-brand-navy/80 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-50/10 via-transparent to-transparent opacity-90" />
+        </div>
         
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl space-y-4">

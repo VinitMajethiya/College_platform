@@ -2,6 +2,7 @@
 
 import { MapPin, Scale, Star, Check } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 import { SaveButton } from "@/components/saved/SaveButton";
 import { College } from "@/lib/types";
@@ -51,10 +52,17 @@ export function CollegeCard({ college }: { college: College }) {
     <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm hover:border-orange-300 hover:shadow-md transition-all duration-200">
       
       {/* College Banner */}
-      <Link href={`/colleges/${college.slug}`} className="block relative h-[72px] overflow-hidden select-none">
-        <div className={cn("absolute inset-0 bg-gradient-to-r", gradient)} />
-        {/* Subtle dot pattern */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:16px_16px]" />
+      <Link href={`/colleges/${college.slug}`} className="block relative h-28 overflow-hidden select-none">
+        <Image
+          src={college.imageUrl || `/images/colleges/${["engineering", "medical", "management", "law"].includes(stream) ? stream : "default"}.png`}
+          alt={college.name}
+          fill
+          sizes="(max-width: 768px) 100vw, 30vw"
+          className="object-cover group-hover:scale-105 transition-transform duration-500"
+          unoptimized
+        />
+        {/* Rich gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-black/20" />
       </Link>
 
       {/* Absolute Badges on Banner */}
