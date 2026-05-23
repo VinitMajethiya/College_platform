@@ -1,21 +1,26 @@
-import { vi, describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import { listColleges } from "@/lib/college-service";
+import {
+  getCollegeBySlug,
+  getRelatedColleges,
+  listColleges
+} from "@/lib/college-service";
 import { prisma } from "@/lib/prisma";
 
 vi.mock("@/lib/prisma", () => ({
   prisma: {
     college: {
       findMany: vi.fn(),
-      count: vi.fn()
+      count: vi.fn(),
+      findUnique: vi.fn()
     },
     $transaction: vi.fn()
   }
 }));
 
 const mockCollege1 = {
-  id: "iit-bombay",
-  slug: "iit-bombay",
+  id: "indian-institute-of-technology-bombay",
+  slug: "indian-institute-of-technology-bombay",
   name: "Indian Institute of Technology Bombay",
   city: "Mumbai",
   state: "Maharashtra",
@@ -52,8 +57,8 @@ const mockCollege1 = {
 };
 
 const mockCollege2 = {
-  id: "nit-trichy",
-  slug: "nit-trichy",
+  id: "national-institute-of-technology-trichy",
+  slug: "national-institute-of-technology-trichy",
   name: "National Institute of Technology Trichy",
   city: "Tiruchirappalli",
   state: "Tamil Nadu",
@@ -114,5 +119,59 @@ describe("listColleges", () => {
     expect(result.colleges[0].annualFeesMin).toBeLessThanOrEqual(
       result.colleges[1].annualFeesMin
     );
+  });
+});
+
+describe("getCollegeBySlug", () => {
+  it("returns the college by slug from the database", async () => {
+    vi.mocked(prisma.college.findUnique).mockResolvedValueOnce(
+      mockCollege1 as any
+    );
+
+    const result = await getCollegeBySlug(
+      "indian-institute-of-technology-bombay"
+    );
+    expect(result).not.toBeNull();
+    expect(result?.slug).toBe("indian-institute-of-technology-bombay");
+  });
+
+  it("falls back to sample data if database query fails or is empty", async () => {
+    vi.mocked(prisma.college.findUnique).mockRejectedValueOnce(
+      new Error("DB error")
+    );
+
+    const result = await getCollegeBySlug(
+      "indian-institute-of-technology-bombay"
+    );
+    expect(result).not.toBeNull();
+    expect(result?.slug).toBe("indian-institute-of-technology-bombay");
+  });
+});
+
+describe("getRelatedColleges", () => {
+  it("returns related colleges matching state or course type", async () => {
+    vi.mocked(prisma.college.findUnique).mockResolvedValueOnce(
+      mockCollege1 as any
+    );
+    vi.mocked(prisma.college.findMany).mockResolvedValueOnce([
+      mockCollege2
+    ] as any);
+
+    const result = await getRelatedColleges(
+      "indian-institute-of-technology-bombay"
+    );
+    expect(result).toHaveLength(1);
+    expect(result[0].slug).toBe("national-institute-of-technology-trichy");
+  });
+
+  it("falls back to sample related colleges if database fails", async () => {
+    vi.mocked(prisma.college.findUnique).mockRejectedValueOnce(
+      new Error("DB error")
+    );
+
+    const result = await getRelatedColleges(
+      "indian-institute-of-technology-bombay"
+    );
+    expect(result.length).toBeGreaterThan(0);
   });
 });
