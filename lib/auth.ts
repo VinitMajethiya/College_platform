@@ -1,15 +1,12 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import NextAuth from "next-auth";
-import Google from "next-auth/providers/google";
 import Nodemailer from "next-auth/providers/nodemailer";
 
+import { authConfig } from "@/auth.config";
 import { prisma } from "@/lib/prisma";
 
 const providers = [
-  Google({
-    clientId: process.env.GOOGLE_CLIENT_ID ?? "",
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? ""
-  }),
+  ...authConfig.providers,
   ...(process.env.EMAIL_SERVER
     ? [
         Nodemailer({
@@ -21,18 +18,10 @@ const providers = [
 ];
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
+  ...authConfig,
   adapter: PrismaAdapter(prisma),
   session: {
-    strategy: "database"
+    strategy: "jwt"
   },
-  pages: {
-    signIn: "/auth/signin"
-  },
-  providers,
-  callbacks: {
-    authorized({ auth: session, request }) {
-      const isProtected = request.nextUrl.pathname.startsWith("/saved");
-      return !isProtected || Boolean(session?.user);
-    }
-  }
+  providers
 });
