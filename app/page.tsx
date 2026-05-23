@@ -1,5 +1,6 @@
 import { Search, Scale, Heart, Sparkles } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 import { CollegeCard } from "@/components/college/CollegeCard";
 import { mapCollege } from "@/lib/college-service";
@@ -43,60 +44,110 @@ export default async function HomePage() {
     <main className="bg-gray-50 min-h-screen">
       
       {/* Section 1: Hero */}
-      <section className="relative bg-gradient-to-br from-brand-navy via-brand-navyMid to-brand-navyDeep py-20 text-white overflow-hidden dot-grid border-b border-white/5">
+      <section className="relative bg-gradient-to-br from-brand-navy via-brand-navyMid to-brand-navyDeep py-12 lg:py-24 text-white overflow-hidden dot-grid border-b border-white/5">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-3xl">
-            {/* Top Badge */}
-            <div className="mb-6 inline-flex items-center gap-2 bg-brand-orange/10 text-orange-400 border border-brand-orange/20 rounded-full text-xs px-3.5 py-1.5 font-medium select-none">
-              <Sparkles className="h-3.5 w-3.5" />
-              <span>India&apos;s student-first college guide</span>
+          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+            
+            {/* Left Column: Content */}
+            <div className="space-y-6">
+              {/* Top Badge */}
+              <div className="inline-flex items-center gap-2 bg-brand-orange/10 text-orange-400 border border-brand-orange/20 rounded-full text-xs px-3.5 py-1.5 font-medium select-none animate-pulse">
+                <Sparkles className="h-3.5 w-3.5" />
+                <span>India&apos;s student-first college guide</span>
+              </div>
+
+              {/* Headline */}
+              <h1 className="text-4xl sm:text-5xl font-semibold text-white leading-tight">
+                Right guidance,<br />
+                <span className="text-brand-orange">brighter future.</span>
+              </h1>
+
+              {/* Subtitle */}
+              <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-md">
+                Real placement data, honest reviews, and zero sponsored fluff. Find your college without the noise.
+              </p>
+
+              {/* Search Card Container */}
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-3 max-w-xl">
+                <form action="/colleges" method="GET" className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-white rounded-xl p-1.5 shadow-md">
+                  <div className="flex items-center flex-1 min-w-0">
+                    <Search className="h-5 w-5 text-gray-400 ml-3 flex-shrink-0" />
+                    <input
+                      name="search"
+                      className="w-full text-sm text-gray-900 bg-transparent outline-none px-3 py-2 sm:py-0"
+                      placeholder="Search college name, course, city, or exam..."
+                      aria-label="Search colleges"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="bg-brand-orange hover:bg-brand-orangeHover text-white text-sm font-semibold px-6 py-2.5 rounded-lg transition-all flex-shrink-0"
+                  >
+                    Search
+                  </button>
+                </form>
+              </div>
+
+              {/* Quick Access Tags */}
+              <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+                <span className="text-xs text-slate-500 font-medium select-none whitespace-nowrap">Popular:</span>
+                {quickTags.map((tag) => (
+                  <Link
+                    key={tag.label}
+                    href={tag.href}
+                    className="text-xs px-3 py-1.5 rounded-full bg-white/5 text-slate-400 border border-white/10 hover:border-brand-orange/40 hover:text-brand-orange transition-all whitespace-nowrap"
+                  >
+                    {tag.label}
+                  </Link>
+                ))}
+              </div>
             </div>
 
-            {/* Headline */}
-            <h1 className="text-4xl sm:text-5xl font-semibold text-white leading-tight">
-              Right guidance,<br />
-              <span className="text-brand-orange">brighter future.</span>
-            </h1>
-
-            {/* Subtitle */}
-            <p className="mt-4 text-sm sm:text-base text-slate-400 leading-relaxed max-w-md">
-              Real placement data, honest reviews, and zero sponsored fluff. Find your college without the noise.
-            </p>
-
-            {/* Search Card Container */}
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-3 max-w-2xl mt-8">
-              <form action="/colleges" method="GET" className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-white rounded-xl p-1.5 shadow-md">
-                <div className="flex items-center flex-1 min-w-0">
-                  <Search className="h-5 w-5 text-gray-400 ml-3 flex-shrink-0" />
-                  <input
-                    name="search"
-                    className="w-full text-sm text-gray-900 bg-transparent outline-none px-3 py-2 sm:py-0"
-                    placeholder="Search college name, course, city, or exam..."
-                    aria-label="Search colleges"
+            {/* Right Column: Premium Visual Mockup */}
+            <div className="relative">
+              {/* Decorative glows */}
+              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-brand-orange to-brand-orangeHover opacity-25 blur-3xl pointer-events-none" />
+              
+              <div className="relative bg-white/5 border border-white/10 rounded-3xl p-3 overflow-hidden shadow-2xl backdrop-blur-sm">
+                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl">
+                  <Image
+                    src="/images/landing_hero.png"
+                    alt="CollegeCompass Discovery Dashboard"
+                    fill
+                    priority
+                    className="object-cover"
+                    unoptimized
                   />
                 </div>
-                <button
-                  type="submit"
-                  className="bg-brand-orange hover:bg-brand-orangeHover text-white text-sm font-semibold px-6 py-2.5 rounded-lg transition-all flex-shrink-0"
-                >
-                  Search
-                </button>
-              </form>
+
+                {/* Overlaid floating interactive badges */}
+                <div className="absolute -bottom-2 -left-2 bg-brand-navyMid/95 border border-white/10 rounded-2xl p-4 shadow-xl backdrop-blur max-w-xs hover:-translate-y-1 transition-transform duration-300 select-none">
+                  <div className="flex items-center gap-3">
+                    <span className="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg">
+                      <Scale className="h-5 w-5" />
+                    </span>
+                    <div>
+                      <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">Compare Tool</p>
+                      <p className="text-xs font-bold text-white mt-0.5">IIT Bombay vs NIT Trichy</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="absolute -top-2 -right-2 bg-brand-navyMid/95 border border-white/10 rounded-2xl p-4 shadow-xl backdrop-blur max-w-xs hover:-translate-y-1 transition-transform duration-300 select-none">
+                  <div className="flex items-center gap-3">
+                    <span className="p-2 bg-brand-orange/10 text-brand-orange rounded-lg">
+                      <Sparkles className="h-5 w-5" />
+                    </span>
+                    <div>
+                      <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">Recommendation</p>
+                      <p className="text-xs font-bold text-white mt-0.5">Best Placement Value</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Quick Access Tags */}
-            <div className="mt-4 flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
-              <span className="text-xs text-slate-500 font-medium select-none whitespace-nowrap">Popular:</span>
-              {quickTags.map((tag) => (
-                <Link
-                  key={tag.label}
-                  href={tag.href}
-                  className="text-xs px-3 py-1.5 rounded-full bg-white/5 text-slate-400 border border-white/10 hover:border-brand-orange/40 hover:text-brand-orange transition-all whitespace-nowrap"
-                >
-                  {tag.label}
-                </Link>
-              ))}
-            </div>
+          </div>
 
             {/* Stats Bar */}
             <div className="border-t border-white/5 mt-12 pt-8 grid grid-cols-2 sm:grid-cols-4 gap-6">
@@ -113,8 +164,7 @@ export default async function HomePage() {
               ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
       {/* Section 2: Stream Filter + Featured Colleges */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
@@ -187,7 +237,7 @@ export default async function HomePage() {
             ].map((step) => {
               const Icon = step.icon;
               return (
-                <div key={step.title} className="flex flex-col items-start p-6 rounded-2xl bg-gray-50 border border-gray-100 hover:shadow-sm transition-all duration-200">
+                <div key={step.title} className="flex flex-col items-start p-6 rounded-2xl bg-gray-50 border border-gray-100 hover:border-brand-orange/30 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
                   <span className="p-3 bg-brand-orange/10 rounded-xl text-brand-orange mb-4">
                     <Icon className="h-6 w-6" />
                   </span>
