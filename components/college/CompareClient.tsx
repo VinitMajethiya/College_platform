@@ -141,6 +141,8 @@ export function CompareClient() {
   const lowestMinFees = Math.min(...selected.map((c) => c.annualFeesMin));
   const highestRating = Math.max(...selected.map((c) => c.rating));
   const highestAvgPackage = Math.max(...selected.map((c) => c.avgPackageLPA || 0));
+  const highestPlacementRate = Math.max(...selected.map((c) => c.placementPercent || 0));
+  const bestNirf = Math.min(...selected.map((c) => c.nirfRanking || 999999).filter((r) => r !== 999999));
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -218,15 +220,27 @@ export function CompareClient() {
               })}
 
               {/* DASHED COLUMN SLOT IF < 3 */}
-              {selected.length < 3 && (
-                <th className="p-4 align-middle w-64 bg-gray-50/20 border-l border-dashed border-gray-200">
-                  <div className="flex flex-col items-center justify-center py-4 text-center">
-                    <Sparkles className="h-5 w-5 text-orange-400 animate-pulse mb-2" />
-                    <span className="text-xs font-bold text-gray-400">Slot Available ({3 - selected.length} left)</span>
-                    <span className="text-[10px] text-gray-300 mt-0.5">Use search below to add</span>
+              {[...Array(3 - selected.length)].map((_, i) => (
+                <th key={`empty-${i}`} className="p-6 align-middle w-64 bg-gray-50/5 border-l border-dashed border-gray-200">
+                  <div className="flex flex-col items-center justify-center text-center select-none">
+                    <div className="p-2.5 bg-slate-100 text-slate-400 rounded-full mb-3">
+                      <Plus className="h-5 w-5" />
+                    </div>
+                    <span className="text-xs font-bold text-gray-400">Add College</span>
+                    <span className="text-[10px] text-gray-300 mt-1">Slot {selected.length + i + 1} available</span>
+                    <button
+                      onClick={() => {
+                        const input = document.getElementById("compare-search-input");
+                        input?.focus();
+                        input?.scrollIntoView({ behavior: "smooth", block: "center" });
+                      }}
+                      className="mt-4 inline-flex items-center justify-center gap-1.5 rounded-lg border border-brand-orange/30 text-brand-orange hover:bg-brand-orangeLight px-3.5 py-1.5 text-[10px] font-semibold transition-all active:scale-95 animate-pulse"
+                    >
+                      <span>Choose college</span>
+                    </button>
                   </div>
                 </th>
-              )}
+              ))}
             </tr>
           </thead>
           
@@ -234,13 +248,16 @@ export function CompareClient() {
             {/* 1. Overview */}
             <tr className="bg-gray-50/40 select-none">
               <td colSpan={4} className="p-3 font-semibold text-gray-900 text-xs tracking-wider uppercase">
-                Overview
+                Overview & Infrastructure
               </td>
             </tr>
             <CompareRow
               label="NIRF Ranking"
               values={selected.map((c) => (c.nirfRanking ? `#${c.nirfRanking}` : "N/A"))}
               emptyCount={3 - selected.length}
+              highlightType="nirf"
+              collegeFees={selected.map((c) => c.nirfRanking || 999999)}
+              bestVal={bestNirf}
             />
             <CompareRow
               label="Overall Rating"
@@ -258,6 +275,11 @@ export function CompareClient() {
             <CompareRow
               label="Accreditations"
               values={selected.map((c) => c.accreditations.join(", ") || "N/A")}
+              emptyCount={3 - selected.length}
+            />
+            <CompareRow
+              label="Campus Area"
+              values={selected.map((c) => c.campusAreaAcres ? `${c.campusAreaAcres} Acres` : "N/A")}
               emptyCount={3 - selected.length}
             />
 
@@ -304,12 +326,20 @@ export function CompareClient() {
               label="Placement Rate"
               values={selected.map((c) => (c.placementPercent ? `${c.placementPercent}%` : "N/A"))}
               emptyCount={3 - selected.length}
+              highlightType="placementRate"
+              collegePackages={selected.map((c) => c.placementPercent || 0)}
+              bestVal={highestPlacementRate}
+            />
+            <CompareRow
+              label="Top Recruiters"
+              values={selected.map((c) => c.topRecruiters?.join(", ") || "N/A")}
+              emptyCount={3 - selected.length}
             />
 
             {/* 4. Courses */}
             <tr className="bg-gray-50/40 select-none">
               <td colSpan={4} className="p-3 font-semibold text-gray-900 text-xs tracking-wider uppercase">
-                Courses
+                Courses & Academics
               </td>
             </tr>
             <tr className="hover:bg-gray-50/30">
@@ -332,6 +362,48 @@ export function CompareClient() {
                 <td className="p-4 border-l border-dashed border-gray-200 bg-gray-50/10" />
               )}
             </tr>
+            <CompareRow
+              label="Total Courses Offered"
+              values={selected.map((c) => `${c.courses?.length || 0} Courses`)}
+              emptyCount={3 - selected.length}
+            />
+
+            {/* 5. Contact & Location */}
+            <tr className="bg-gray-50/40 select-none">
+              <td colSpan={4} className="p-3 font-semibold text-gray-900 text-xs tracking-wider uppercase">
+                Contact & Details
+              </td>
+            </tr>
+            <CompareRow
+              label="Location"
+              values={selected.map((c) => `${c.city}, ${c.state}`)}
+              emptyCount={3 - selected.length}
+            />
+            <CompareRow
+              label="Website"
+              values={selected.map((c) => c.website ? (
+                <a
+                  key={c.id}
+                  href={c.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-brand-orange hover:text-brand-orangeHover hover:underline font-medium truncate block max-w-[180px]"
+                >
+                  {c.website.replace(/^https?:\/\/(www\.)?/, "")}
+                </a>
+              ) : "N/A")}
+              emptyCount={3 - selected.length}
+            />
+            <CompareRow
+              label="Email Address"
+              values={selected.map((c) => c.email || "N/A")}
+              emptyCount={3 - selected.length}
+            />
+            <CompareRow
+              label="Phone Number"
+              values={selected.map((c) => c.phone || "N/A")}
+              emptyCount={3 - selected.length}
+            />
           </tbody>
         </table>
       </div>
@@ -351,6 +423,14 @@ export function CompareClient() {
           <span className="h-3.5 w-3.5 rounded bg-blue-50 border border-blue-200" />
           <span>Best Placement (Highest Avg Package)</span>
         </div>
+        <div className="flex items-center gap-1.5">
+          <span className="h-3.5 w-3.5 rounded bg-teal-50 border border-teal-200" />
+          <span>Highest Placement Rate (%)</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="h-3.5 w-3.5 rounded bg-purple-50 border border-purple-200" />
+          <span>Top Ranked (Best NIRF Rank)</span>
+        </div>
       </div>
 
       {/* Quick Search Widget inside comparison panel (if slots remain) */}
@@ -362,6 +442,7 @@ export function CompareClient() {
           <div className="relative">
             <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
             <input
+              id="compare-search-input"
               type="text"
               placeholder="Search by college name, stream, or city..."
               value={searchQuery}
@@ -420,9 +501,9 @@ export function CompareClient() {
 
 interface CompareRowProps {
   label: string;
-  values: string[];
+  values: (string | React.ReactNode)[];
   emptyCount: number;
-  highlightType?: "fees" | "rating" | "placement";
+  highlightType?: "fees" | "rating" | "placement" | "placementRate" | "nirf";
   collegeFees?: number[];
   collegeRatings?: number[];
   collegePackages?: number[];
@@ -455,6 +536,12 @@ function CompareRow({
         } else if (highlightType === "placement" && collegePackages && bestVal !== undefined && bestVal > 0) {
           isBest = collegePackages[idx] === bestVal;
           if (isBest) cellClass = "p-4 border-l border-gray-100 bg-blue-50 text-blue-800 font-semibold border-y border-blue-200";
+        } else if (highlightType === "placementRate" && collegePackages && bestVal !== undefined && bestVal > 0) {
+          isBest = collegePackages[idx] === bestVal;
+          if (isBest) cellClass = "p-4 border-l border-gray-100 bg-teal-50 text-teal-800 font-semibold border-y border-teal-200";
+        } else if (highlightType === "nirf" && collegeFees && bestVal !== undefined && bestVal < 999999) {
+          isBest = collegeFees[idx] === bestVal;
+          if (isBest) cellClass = "p-4 border-l border-gray-100 bg-purple-50 text-purple-800 font-semibold border-y border-purple-200";
         }
 
         return (
