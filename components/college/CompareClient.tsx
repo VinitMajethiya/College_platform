@@ -39,8 +39,10 @@ export function CompareClient() {
     }
   }, [urlIds, add, storeItems]);
 
-  const { data: collegesRes, isLoading } = useColleges({ ids: ids.join(",") });
-  const selected = (collegesRes?.data || []).slice(0, 3);
+  const { data: collegesRes, isLoading } = useColleges(
+    ids.length > 0 ? { ids: ids.join(",") } : { ids: "null" }
+  );
+  const selected = ids.length > 0 ? (collegesRes?.data || []).slice(0, 3) : [];
 
   // Search input state
   const [searchQuery, setSearchQuery] = useState("");
@@ -246,8 +248,8 @@ export function CompareClient() {
           
           <tbody className="divide-y divide-gray-100">
             {/* 1. Overview */}
-            <tr className="bg-gray-50/40 select-none">
-              <td colSpan={4} className="p-3 font-semibold text-gray-900 text-xs tracking-wider uppercase">
+            <tr className="bg-slate-100/85 border-y border-slate-200 select-none">
+              <td colSpan={4} className="p-3.5 font-bold text-slate-800 text-xs tracking-wider uppercase">
                 Overview & Infrastructure
               </td>
             </tr>
@@ -284,8 +286,8 @@ export function CompareClient() {
             />
 
             {/* 2. Fees */}
-            <tr className="bg-gray-50/40 select-none">
-              <td colSpan={4} className="p-3 font-semibold text-gray-900 text-xs tracking-wider uppercase">
+            <tr className="bg-slate-100/85 border-y border-slate-200 select-none">
+              <td colSpan={4} className="p-3.5 font-bold text-slate-800 text-xs tracking-wider uppercase">
                 Fees
               </td>
             </tr>
@@ -304,8 +306,8 @@ export function CompareClient() {
             />
 
             {/* 3. Placements */}
-            <tr className="bg-gray-50/40 select-none">
-              <td colSpan={4} className="p-3 font-semibold text-gray-900 text-xs tracking-wider uppercase">
+            <tr className="bg-slate-100/85 border-y border-slate-200 select-none">
+              <td colSpan={4} className="p-3.5 font-bold text-slate-800 text-xs tracking-wider uppercase">
                 Placements
               </td>
             </tr>
@@ -337,8 +339,8 @@ export function CompareClient() {
             />
 
             {/* 4. Courses */}
-            <tr className="bg-gray-50/40 select-none">
-              <td colSpan={4} className="p-3 font-semibold text-gray-900 text-xs tracking-wider uppercase">
+            <tr className="bg-slate-100/85 border-y border-slate-200 select-none">
+              <td colSpan={4} className="p-3.5 font-bold text-slate-800 text-xs tracking-wider uppercase">
                 Courses & Academics
               </td>
             </tr>
@@ -369,8 +371,8 @@ export function CompareClient() {
             />
 
             {/* 5. Contact & Location */}
-            <tr className="bg-gray-50/40 select-none">
-              <td colSpan={4} className="p-3 font-semibold text-gray-900 text-xs tracking-wider uppercase">
+            <tr className="bg-slate-100/85 border-y border-slate-200 select-none">
+              <td colSpan={4} className="p-3.5 font-bold text-slate-800 text-xs tracking-wider uppercase">
                 Contact & Details
               </td>
             </tr>
@@ -521,32 +523,71 @@ function CompareRow({
   bestVal
 }: CompareRowProps) {
   return (
-    <tr className="hover:bg-gray-50/20 transition-colors">
+    <tr className="hover:bg-gray-50/20 transition-colors odd:bg-white even:bg-slate-50/30">
       <td className="p-4 font-semibold text-gray-500 select-none">{label}</td>
       {values.map((value, idx) => {
         let isBest = false;
         let cellClass = "p-4 border-l border-gray-100 text-gray-700";
+        let badge = null;
 
         if (highlightType === "fees" && collegeFees && bestVal !== undefined) {
           isBest = collegeFees[idx] === bestVal;
-          if (isBest) cellClass = "p-4 border-l border-gray-100 bg-green-50 text-green-800 font-semibold border-y border-green-200";
+          if (isBest) {
+            cellClass = "p-4 border-l border-gray-100 bg-green-50/60 text-green-800 font-semibold border-y border-green-200/50";
+            badge = (
+              <span className="inline-block mt-1 text-[8px] font-extrabold bg-green-100 text-green-700 px-1.5 py-0.5 rounded uppercase tracking-wider select-none">
+                Best Value
+              </span>
+            );
+          }
         } else if (highlightType === "rating" && collegeRatings && bestVal !== undefined) {
           isBest = collegeRatings[idx] === bestVal;
-          if (isBest) cellClass = "p-4 border-l border-gray-100 bg-orange-50 text-orange-850 font-semibold border-y border-orange-200";
+          if (isBest) {
+            cellClass = "p-4 border-l border-gray-100 bg-orange-50/60 text-orange-950 font-semibold border-y border-orange-200/50";
+            badge = (
+              <span className="inline-block mt-1 text-[8px] font-extrabold bg-orange-100 text-brand-orange px-1.5 py-0.5 rounded uppercase tracking-wider select-none">
+                Top Rated
+              </span>
+            );
+          }
         } else if (highlightType === "placement" && collegePackages && bestVal !== undefined && bestVal > 0) {
           isBest = collegePackages[idx] === bestVal;
-          if (isBest) cellClass = "p-4 border-l border-gray-100 bg-blue-50 text-blue-800 font-semibold border-y border-blue-200";
+          if (isBest) {
+            cellClass = "p-4 border-l border-gray-100 bg-blue-50/60 text-blue-800 font-semibold border-y border-blue-200/50";
+            badge = (
+              <span className="inline-block mt-1 text-[8px] font-extrabold bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded uppercase tracking-wider select-none">
+                Top Placement
+              </span>
+            );
+          }
         } else if (highlightType === "placementRate" && collegePackages && bestVal !== undefined && bestVal > 0) {
           isBest = collegePackages[idx] === bestVal;
-          if (isBest) cellClass = "p-4 border-l border-gray-100 bg-teal-50 text-teal-800 font-semibold border-y border-teal-200";
+          if (isBest) {
+            cellClass = "p-4 border-l border-gray-100 bg-teal-50/60 text-teal-850 font-semibold border-y border-teal-200/50";
+            badge = (
+              <span className="inline-block mt-1 text-[8px] font-extrabold bg-teal-100 text-teal-700 px-1.5 py-0.5 rounded uppercase tracking-wider select-none">
+                Top Placement Rate
+              </span>
+            );
+          }
         } else if (highlightType === "nirf" && collegeFees && bestVal !== undefined && bestVal < 999999) {
           isBest = collegeFees[idx] === bestVal;
-          if (isBest) cellClass = "p-4 border-l border-gray-100 bg-purple-50 text-purple-800 font-semibold border-y border-purple-200";
+          if (isBest) {
+            cellClass = "p-4 border-l border-gray-100 bg-purple-50/60 text-purple-900 font-semibold border-y border-purple-200/50";
+            badge = (
+              <span className="inline-block mt-1 text-[8px] font-extrabold bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded uppercase tracking-wider select-none">
+                Top Ranked
+              </span>
+            );
+          }
         }
 
         return (
           <td key={idx} className={cellClass}>
-            {value}
+            <div className="flex flex-col items-start gap-1">
+              <span className="leading-normal">{value}</span>
+              {badge}
+            </div>
           </td>
         );
       })}
